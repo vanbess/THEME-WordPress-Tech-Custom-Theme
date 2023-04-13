@@ -1,0 +1,65 @@
+/*
+Theme Name: Excellerate Tech Bootstrap
+Theme URI: N/A
+Author: WC Bessinger @ Silverback Dev Studios (Pty) Ltd
+Author URI: https://silverbackdev.co.za/
+Description: This is a basic Bootstrap based theme created for a custom vendor based project and employs multisite.
+Version: 1.0
+Requires at least: 5.0
+Tested up to: 5.4
+Requires PHP: 7.4
+License: GNU General Public License v2 or later
+License URI: http://www.gnu.org/licenses/gpl-2.0.html
+Text Domain: extech
+*/
+
+div#contact-bar-top {
+    font-size: 0.85rem !important;
+}
+
+div#dashboard-cont {
+    margin-bottom: -2.9em;
+}
+
+div#four_oh_four {
+    min-height: 66vh;
+}
+
+a#navbar_register {
+    font-weight: 500;
+}
+
+div#how_it_works i {
+    font-size: 7em;
+}
+
+div#landing p {
+    font-size: 1.3em;
+}
+
+.h1, h1 {
+    font-size: 3.5rem;
+}
+
+div#intro_banner_text {
+    border-radius: 10px;
+}
+
+div#intro_banner_text > h1 {
+    line-height: 1.5em;
+}
+
+#intro_banner_register_btn, #hiw_register_btn {
+    font-size: 1.7rem;
+    font-weight: 500;
+}
+
+.landing-icon-div.m-auto {
+    border: 8px solid var(--bs-gray);
+    border-radius: 10%;
+    box-sizing: content-box;
+}
+
+div#intro_banner {
+    min-height: 600px;
+}
