@@ -10,8 +10,7 @@
   <!-- Custom CSS -->
   <style>
     body {
-      background-color: #EFEFEF;
-      background-image: linear-gradient(45deg, #DFDFDF, #EFEFEF);
+      background-color: white;
     }
   </style>
 

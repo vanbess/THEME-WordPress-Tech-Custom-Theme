@@ -81,6 +81,7 @@
         </ul>
 
         <div class="d-flex">
+          <a href="<?php echo get_site_url() . '/dashboard/log-in/'; ?>" class="text-decoration-none text-light pt-2 pe-3">Already registered? Log in.</a>
           <a href="<?php echo get_site_url() . '/register'; ?>" id="navbar_register" class="btn btn-warning text-uppercase" title="Register your shop today">Register</a>
         </div>
 
@@ -88,11 +89,11 @@
     </div>
   </nav>
 
-<script>
-  $  = jQuery;
+  <script>
+    $ = jQuery;
 
-  $('.nav-link').click(function () { 
-    $('.nav-link').removeClass('active');
-    $(this).addClass('active');
-  });
-</script>
+    $('.nav-link').click(function() {
+      $('.nav-link').removeClass('active');
+      $(this).addClass('active');
+    });
+  </script>

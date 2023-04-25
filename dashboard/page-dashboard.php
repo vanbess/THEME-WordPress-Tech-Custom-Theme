@@ -13,7 +13,7 @@ global $post;
 <!-- Main content -->
 <div id="dashboard-cont" class="container mt-5" style="min-height: 80vh;">
     <div class="row">
-        <div class="col-md-6">
+        <div class="col-md-4">
             <div class="card">
                 <div class="card-header">Sales</div>
                 <div class="card-body">
@@ -22,7 +22,7 @@ global $post;
                 </div>
             </div>
         </div>
-        <div class="col-md-6">
+        <div class="col-md-4">
             <div class="card">
                 <div class="card-header">Users</div>
                 <div class="card-body">

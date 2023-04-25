@@ -134,6 +134,10 @@ function process_shop_registration() {
         activate_plugin($plugin);
     }
 
+    // Set Woocommerce country to ZA and currency to ZAR
+    update_option( 'woocommerce_default_country', 'ZA' );
+    update_option( 'woocommerce_currency', 'ZAR' );
+
     // @todo add settings for specific payment gateways so that payments can actually be taken
 
     /**

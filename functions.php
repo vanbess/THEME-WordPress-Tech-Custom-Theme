@@ -17,10 +17,18 @@ restore_current_blog();
 
 // enqueue our scripts
 add_action('wp_enqueue_scripts', function () {
+
+    // bootstrap
     wp_enqueue_style('bootstrap-icons', EXTECH_URI . '/inc/bootstrap-icons/bootstrap-icons.css', [], '', 'all');
     wp_enqueue_style('bootstrap', EXTECH_URI . '/inc/bootstrap/css/bootstrap.min.css', [], 'v5.3.0-alpha1', 'all');
-    wp_enqueue_style('theme', EXTECH_URI . '/style.css', [], '1.0.0', 'all');
     wp_enqueue_script('bootstrap', EXTECH_URI . '/inc/bootstrap/js/bootstrap.bundle.min.js', ['jquery'], 'v5.3.0-alpha1', true);
+
+    // theme
+    wp_enqueue_style('theme', EXTECH_URI . '/style.css', [], '1.0.0', 'all');
+
+    // jquery table sorter
+    wp_enqueue_script('jq-tablesorter', EXTECH_URI . '/assets/js/tablesorter.min.js', ['jquery'], 'v2.31.3', true);
+
 });
 
 // fix upload size limit nonsense
@@ -41,34 +49,34 @@ include_once EXTECH_PATH . '/account_activation/activation_ajax.php';
 /**
  * Disable password change emails
  */
-add_filter('wp_password_change_notification_email', function($send, $user){
+add_filter('wp_password_change_notification_email', function ($send, $user) {
     return false;
 });
 
+
+
 /**
- * Delete multisite users if there child site is deleted via backend`
+ * Setup product related nonces
  */
+define('SINGLE_PROD_NONCE', wp_create_nonce('single prod nonce'));
+define('MULTIPLE_PROD_NONCE', wp_create_nonce('multiple prod nonce'));
+define('IMPORT_PROD_NONCE', wp_create_nonce('import prod nonce'));
+define('EDIT_PROD_NONCE', wp_create_nonce('edit prod nonce'));
+define('MORE_PROD_NONCE', wp_create_nonce('more prod nonce'));
+define('DELETE_PROD_NONCE', wp_create_nonce('delete prod nonce'));
+define('DELETE_PRODS_NONCE', wp_create_nonce('delete prods nonce'));
+define('FETCH_INIT_PRODS', wp_create_nonce('fetch prods nonce'));
 
-// check if is subdirectory install (child site)
-// function is_subdirectory_install() {
-//     return (strpos($_SERVER['REQUEST_URI'], '/wp-content/') !== false);
-// }
-
-// hook to wpmu_delete_blog to remove associated users when child site is deleted
-// add_action('wpmu_delete_blog', function ($blog_id, $drop) {
-
-//     // bail early if not child site
-//     if (!is_subdomain_install() && !is_subdirectory_install()) :
-//         return;
-//     endif;
-
-//     // delete all child site users
-//     $users = get_users(['blog_id' => $blog_id]);
-
-//     foreach ($users as $user) :
-//         wpmu_delete_user($user->ID);
-//     endforeach;
-// }, 10, 2);
+/**
+ * Product related AJAX actions
+ */
+include_once EXTECH_PATH.'/dashboard/products/ajax/add_single_prod.php';
+include_once EXTECH_PATH.'/dashboard/products/ajax/delete_multiple_prods.php';
+include_once EXTECH_PATH.'/dashboard/products/ajax/delete_single_prod.php';
+include_once EXTECH_PATH.'/dashboard/products/ajax/edit_single_prod.php';
+include_once EXTECH_PATH.'/dashboard/products/ajax/import_prods.php';
+include_once EXTECH_PATH.'/dashboard/products/ajax/show_more_prods.php';
+include_once EXTECH_PATH.'/dashboard/products/ajax/fetch_prods.php';
 
 /**
  * Customize login page
