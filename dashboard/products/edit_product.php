@@ -129,9 +129,9 @@ add_action('wp_footer', function () {
     <script id="sub_single_prod">
         jQuery(document).ready(function($) {
 
-            $("#form_sub_single_prod").submit(function(e) {
+            $("#form_edit_single_prod").submit(function(e) {
 
-                $('#add_single_product').text('Working...');
+                $('#update_single_product').text('Working...');
 
                 e.preventDefault();
 
@@ -175,8 +175,8 @@ add_action('wp_footer', function () {
                 formData.append("product_status", $("#product_status").val());
                 formData.append("product_stock", $("#product_stock").val());
                 formData.append("current_blog_id", '<?php echo $blog_id ?>');
-                formData.append("action", 'extech_add_single_prod');
-                formData.append("_ajax_nonce", '<?php echo SINGLE_PROD_NONCE ?>');
+                formData.append("action", 'extech_edit_single_prod');
+                formData.append("_ajax_nonce", '<?php echo EDIT_PROD_NONCE ?>');
 
                 $.ajax({
                     type: 'POST',

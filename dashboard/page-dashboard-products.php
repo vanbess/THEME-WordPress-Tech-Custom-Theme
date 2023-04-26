@@ -4,8 +4,6 @@
  * Template Name: Dashboard Products Page
  */
 
-
-
 get_header('dashboard');
 
 global $post;
@@ -58,7 +56,7 @@ global $post;
                         </div>
 
                         <!-- All Products Table -->
-                        <div class="tab-pane fade p-5 bg-light rounded-bottom-3 mb-5" id="all-products" role="tabpanel" aria-labelledby="all-products-tab">
+                        <div class="tab-pane fade pe-5 ps-5 pt-5 pb-2 bg-light rounded-bottom-3 mb-5" id="all-products" role="tabpanel" aria-labelledby="all-products-tab">
                             <?php include __DIR__ . '/products/product_table.php' ?>
                         </div>
                     </div>
@@ -70,5 +68,31 @@ global $post;
         </div>
     </div>
 </div>
+
+<script id="set_previous_tab_on_reload">
+    jQuery(document).ready(function($) {
+
+        // Get the current active tab ID
+        var activeTabId = localStorage.getItem('activeTabID');
+
+        // If there's a stored active tab ID, set it as active
+        if (activeTabId) {
+
+            $('.tab-pane').removeClass('show').removeClass('active');
+            $('.nav-link').removeClass('active');
+
+            $(activeTabId).addClass('show').addClass('active')
+            $(activeTabId+'-tab').addClass('active');
+
+        }
+
+        // Store last selected tab
+        $('#myTab .nav-link').click(function(event) {
+            var active_tab_id = $(this).data('bs-target');
+            localStorage.setItem('activeTabID', active_tab_id);
+        });
+
+    });
+</script>
 
 <?php get_footer('dashboard'); ?>

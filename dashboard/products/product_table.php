@@ -161,14 +161,36 @@ add_action('wp_footer', function () {
 
             });
 
-            // ensure product table is updated on tab click
-            // $('a[data-toggle="tab"]').on('shown.bs.tab', function(e) {
-            //     $("#product_table").trigger("update");
-            // });
+            // Delete single product
+            $(document).on('click', '.delete_prod', function(e) {
 
+                console.log('clicked');
+
+                e.preventDefault();
+
+                alert('Are you sure you want to delete this product?');
+
+                data = {
+                    '_ajax_nonce': '<?php echo DELETE_PROD_NONCE ?>',
+                    'action': 'extech_del_single_prod',
+                    'pid': $(this).data('pid')
+                }
+
+                $.post('<?php echo admin_url('admin-ajax.php'); ?>', data, function(response) {
+                    if (!response.success) {
+                        alert(response.data.msg);
+                        location.reload();
+                    } else {
+                        alert(response.data.msg);
+                        location.reload();
+                    }
+                })
+
+            });
 
         });
     </script>
+
 
 <?php });
 ?>
