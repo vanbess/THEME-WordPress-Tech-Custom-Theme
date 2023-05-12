@@ -17,6 +17,14 @@ img.prod_img.border {
     width: 100px;
 }
 
+.cursor-pointer{
+    cursor: pointer;
+}
+
+.cursor-not-allowed{
+    cursor: not-allowed;
+}
+
 .prod_table_th {
     color: var(--bs-primary);
     text-decoration: underline;

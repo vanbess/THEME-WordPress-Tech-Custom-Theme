@@ -28,7 +28,6 @@ add_action('wp_enqueue_scripts', function () {
 
     // jquery table sorter
     wp_enqueue_script('jq-tablesorter', EXTECH_URI . '/assets/js/tablesorter.min.js', ['jquery'], 'v2.31.3', true);
-
 });
 
 // fix upload size limit nonsense
@@ -53,7 +52,10 @@ add_filter('wp_password_change_notification_email', function ($send, $user) {
     return false;
 });
 
-
+/**
+ * Functions init
+ */
+include_once EXTECH_PATH . '/inc/functions/fnc_init.php';
 
 /**
  * Setup product related nonces
@@ -70,13 +72,13 @@ define('FETCH_INIT_PRODS', wp_create_nonce('fetch prods nonce'));
 /**
  * Product related AJAX actions
  */
-include_once EXTECH_PATH.'/dashboard/products/ajax/add_single_prod.php';
-include_once EXTECH_PATH.'/dashboard/products/ajax/delete_multiple_prods.php';
-include_once EXTECH_PATH.'/dashboard/products/ajax/delete_single_prod.php';
-include_once EXTECH_PATH.'/dashboard/products/ajax/edit_single_prod.php';
-include_once EXTECH_PATH.'/dashboard/products/ajax/import_prods.php';
-include_once EXTECH_PATH.'/dashboard/products/ajax/show_more_prods.php';
-include_once EXTECH_PATH.'/dashboard/products/ajax/fetch_prods.php';
+include_once EXTECH_PATH . '/dashboard/products/ajax/add_single_prod.php';
+include_once EXTECH_PATH . '/dashboard/products/ajax/delete_multiple_prods.php';
+include_once EXTECH_PATH . '/dashboard/products/ajax/delete_single_prod.php';
+include_once EXTECH_PATH . '/dashboard/products/ajax/edit_single_prod.php';
+include_once EXTECH_PATH . '/dashboard/products/ajax/import_prods.php';
+include_once EXTECH_PATH . '/dashboard/products/ajax/show_more_prods.php';
+include_once EXTECH_PATH . '/dashboard/products/ajax/fetch_prods.php';
 
 /**
  * Customize login page
@@ -95,4 +97,26 @@ add_action('login_head', function () { ?>
             border-color: #06549C !important;
         }
     </style>
+<?php });
+
+/**
+ * Change active nav link on page load
+ */
+add_action('wp_footer', function () { ?>
+    <script>
+        $ = jQuery;
+
+        $('.nav-link').removeClass('active');
+
+        jQuery(function($) {
+
+            var curr_page = window.location.href;
+
+            $('div#navbarNav').find('.nav-link').each(function(i, e) {
+                if ($(this).attr('href') === curr_page) {
+                    $(this).addClass('active');
+                }
+            });
+        });
+    </script>
 <?php });
