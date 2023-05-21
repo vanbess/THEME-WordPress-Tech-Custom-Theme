@@ -6,7 +6,37 @@
 
 get_header('dashboard');
 
-global $post;
+global $post, $wpdb;
+
+// retrieve shop id
+$shop_id = fetch_shop_id();
+
+// switch blog
+switch_to_blog($shop_id);
+
+// setup query to retrieve order data
+$query = "
+    SELECT 
+        DATE(post_date) AS Date,
+        SUM(meta.meta_value) AS QtySold,
+        SUM(meta.meta_value * order_items.meta_value) AS TotalRevenue,
+        AVG(order_items.meta_value) AS AvgSaleValue,
+        MIN(order_items.meta_value) AS LowestSaleValue,
+        MAX(order_items.meta_value) AS HighestSaleValue
+    FROM {$wpdb->posts} AS posts
+    INNER JOIN {$wpdb->postmeta} AS meta ON posts.ID = meta.post_id
+    INNER JOIN {$wpdb->prefix}woocommerce_order_items AS order_items ON posts.ID = order_items.order_id
+    INNER JOIN {$wpdb->prefix}woocommerce_order_itemmeta AS item_meta ON order_items.order_item_id = item_meta.order_item_id
+    WHERE posts.post_type = 'shop_order'
+        AND posts.post_status IN ('wc-completed', 'wc-processing')
+        AND meta.meta_key = '_qty'
+        AND item_meta.meta_key = '_line_total'
+        AND posts.post_date >= DATE_SUB(NOW(), INTERVAL 30 DAY)
+    GROUP BY Date
+    ORDER BY Date ASC
+";
+
+$results = $wpdb->get_results($query);
 
 ?>
 
@@ -32,14 +62,36 @@ global $post;
                 </thead>
 
                 <tbody id="table-sales-body" class="text-center">
-                    <tr>
-                        <td class="align-middle">fddsfdsf</td>
-                        <td class="align-middle">sfsdfsdfsdf</td>
-                        <td class="align-middle">sfddsfsdf</td>
-                        <td class="align-middle">sfddsfsfd</td>
-                        <td class="align-middle">sfddsffsd</td>
-                        <td class="align-middle">sfdsdfsdfds</td>
-                    </tr>
+
+                    <?php
+                    if (is_array($results) && !empty($results)) :
+
+                        // Process the results as needed
+                        foreach ($results as $result) :
+
+                            // setup data
+                            $date             = $result->Date;
+                            $qtySold          = $result->QtySold;
+                            $totalRevenue     = $result->TotalRevenue;
+                            $avgSaleValue     = $result->AvgSaleValue;
+                            $lowestSaleValue  = $result->LowestSaleValue;
+                            $highestSaleValue = $result->HighestSaleValue; ?>
+
+                            <tr>
+                                <td class="align-middle"><?php echo $date; ?></td>
+                                <td class="align-middle"><?php echo $qtySold; ?></td>
+                                <td class="align-middle"><?php echo $totalRevenue; ?></td>
+                                <td class="align-middle"><?php echo $avgSaleValue; ?>.</td>
+                                <td class="align-middle"><?php echo $lowestSaleValue; ?></td>
+                                <td class="align-middle"><?php echo $highestSaleValue; ?></td>
+                            </tr>
+
+                        <?php endforeach;
+                    else : ?>
+                        <tr>
+                            <td class="align-middle fw-semibold" colspan="6">There is currently no sales data to display. Once you start selling, sales data will be displayed here.</td>
+                        </tr>
+                    <?php endif; ?>
                 </tbody>
             </table>
 

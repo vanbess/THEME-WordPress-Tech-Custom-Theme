@@ -17,6 +17,10 @@ $shop_meta = fetch_shop_meta();
 // get main user first and last name
 $main_user_first_last = $shop_meta['shop_owner_first_last'][0];
 
+// retrieve roles
+switch_to_blog($shop_meta['child_site_id'][0]);
+$roles = wp_roles()->roles;
+
 ?>
 
 <!-- Main content -->
@@ -35,6 +39,7 @@ $main_user_first_last = $shop_meta['shop_owner_first_last'][0];
                         <th scope="col" class="user-table-th fw-semibold">Username</th>
                         <th scope="col" class="user-table-th fw-semibold">First & Last Name</th>
                         <th scope="col" class="user-table-th fw-semibold">Email</th>
+                        <th scope="col" class="user-table-th fw-semibold">Role</th>
                         <th scope="col" class="user-table-th fw-semibold">Delete User</th>
                     </tr>
                 </thead>
@@ -42,11 +47,12 @@ $main_user_first_last = $shop_meta['shop_owner_first_last'][0];
                 <tbody id="user-list-body" class="text-center">
                     <?php foreach ($users as $user) : ?>
                         <tr class="align-bottom">
-                            <td><?php echo $user->ID; ?></td>
-                            <td><?php echo $user->user_login; ?></td>
-                            <td><?php echo $user->display_name; ?></td>
-                            <td><?php echo $user->user_email; ?></td>
-                            <td><?php echo $user->display_name === $main_user_first_last ? 'Not allowed <span class="user_info" title="the user which created this account cannot be deleted">?</span>' : '<button class="btn btn-danger del_user" title="click to delete this user">Delete</button>'; ?></td>
+                            <td class="align-middle"><?php echo $user->ID; ?></td>
+                            <td class="align-middle"><?php echo $user->user_login; ?></td>
+                            <td class="align-middle"><?php echo $user->display_name; ?></td>
+                            <td class="align-middle"><?php echo $user->user_email; ?></td>
+                            <td class="align-middle"><?php echo $roles[$user->roles[0]]['name']; ?></td>
+                            <td class="align-middle"><?php echo $user->display_name === $main_user_first_last ? 'Not allowed <span class="user_info" title="the user which created this account cannot be deleted">?</span>' : '<button class="btn btn-danger del_user" onclick="delUser(event, ' . $user->ID . ', ' . $shop_meta['child_site_id'][0] . ')" title="click to delete this user">Delete</button>'; ?></td>
                         </tr>
                     <?php endforeach; ?>
 
@@ -65,7 +71,7 @@ $main_user_first_last = $shop_meta['shop_owner_first_last'][0];
             <div id="new-user-form-cont" class="d-none p-3 mt-3 bg-light rounded-3 shadow-sm mb-5">
                 <form method="post">
 
-                    <p class="bg-success-subtle p-2 rounded-2 text-center shadow-sm">Enter new user's info below. Note that all fields are required.</p>
+                    <p class="bg-success-subtle p-2 rounded-2 text-center shadow-sm">Enter new user's info below. Note that all fields are required. The email address you supply will be used as the user's username for logging in.</p>
 
                     <!-- first name -->
                     <div class="mb-3">
@@ -99,8 +105,8 @@ $main_user_first_last = $shop_meta['shop_owner_first_last'][0];
 
                     <!-- passes match/do not match -->
                     <div id="user-pass-match-cont" class="mt-3 mb-3">
-                        <span id="user-pass-match" class="bg-success-subtle p-2 rounded-2 d-none">Passwords match!</span>
-                        <span id="user-pass-mismathc" class="bg-danger-subtle p-2 rounded-2 d-none">Passwords do not match!</span>
+                        <p id="user-pass-match" class="bg-success-subtle p-2 rounded-2 d-none w-100 mt-1 shadow-sm">Passwords match!</p>
+                        <p id="user-pass-mismatch" class="bg-danger-subtle p-2 rounded-2 d-none w-100 mt-1 shadow-sm">Passwords do not match!</p>
                     </div>
 
                     <!-- role selection -->
@@ -108,12 +114,12 @@ $main_user_first_last = $shop_meta['shop_owner_first_last'][0];
                         <label for="role" class="form-label">Select role*</label>
                         <select class="form-select" id="role" required>
                             <option value="manager">Manager</option>
-                            <option value="attendant">Attendant</option>
+                            <option value="attendant">Petrol Attendant</option>
                         </select>
                     </div>
 
                     <!-- submit -->
-                    <button type="submit" class="btn btn-primary w-100">Add User</button>
+                    <button type="submit" onclick="addNewUser(event)" class="btn btn-primary w-100">Add User</button>
                 </form>
             </div>
 
@@ -121,11 +127,121 @@ $main_user_first_last = $shop_meta['shop_owner_first_last'][0];
     </div>
 </div>
 
+<?php
+
+// echo $shop_meta['child_site_id'][0];
+
+// echo '<pre>';
+// print_r($shop_meta);
+// echo '</pre>';
+
+
+?>
+
 <script>
     $ = jQuery;
 
+    // toggle new user form inputs on click
     function userInputs() {
         $('#new-user-form-cont').toggleClass('d-none');
+    }
+
+    // password match check
+    $('#confirmPassword').on('keyup', function(e) {
+
+        var pass = $('#password').val(),
+            confPass = $('#confirmPassword').val();
+
+        if (confPass !== pass) {
+            $('#user-pass-mismatch').removeClass('d-none');
+            $('#user-pass-match').addClass('d-none');
+        } else {
+            $('#user-pass-mismatch').addClass('d-none');
+            $('#user-pass-match').removeClass('d-none');
+        }
+
+    });
+
+    // add new user on click
+    function addNewUser(event) {
+
+        event.preventDefault();
+
+        var btn = $(event.target);
+
+        btn.text('Working...');
+
+        // grab data
+        var firstName = $('#firstName').val(),
+            lastName = $('#lastName').val(),
+            email = $('#email').val(),
+            pass = $('#password').val(),
+            passConf = $('#confirmPassword').val(),
+            role = $('#role').val();
+
+        // setup data check
+        if (!firstName || !lastName || !email || !pass || !passConf) {
+            alert('Please make sure you provide all required user data!');
+            btn.text('Add User');
+            return;
+        }
+
+        // setup data to send
+        data = {
+            '_ajax_nonce': '<?php echo wp_create_nonce('extech add new user') ?>',
+            'action': 'extech_add_new_user',
+            'firstName': firstName,
+            'lastName': lastName,
+            'email': email,
+            'passConf': passConf,
+            'role': role,
+            'site_id': '<?php echo $shop_meta['child_site_id'][0]; ?>'
+        }
+
+        // send
+        $.post('<?php echo admin_url('admin-ajax.php'); ?>', data, function(response) {
+
+            btn.text('Add User');
+
+            // if error
+            if (!response.success) {
+                alert(response.data);
+
+                // if success
+            } else {
+                alert(response.data);
+                location.reload();
+            }
+        })
+    }
+
+    // delete user on click
+    function delUser(event, user_id, site_id) {
+
+        event.preventDefault();
+
+        // confirmation alert
+        alert('Are you sure you want to delete this user?');
+
+        // setup and send ajax request
+        data = {
+            '_ajax_nonce': '<?php echo wp_create_nonce('extech del user') ?>',
+            'action': 'extech_del_user',
+            'user_id': user_id,
+            'site_id': site_id
+        }
+
+        $.post('<?php echo admin_url('admin-ajax.php'); ?>', data, function(response) {
+
+            if (!response.success) {
+                alert(response.data);
+            } else {
+                alert(response.data);
+            }
+            location.reload();s
+        })
+
+
     }
 </script>
 
@@ -145,4 +261,4 @@ $main_user_first_last = $shop_meta['shop_owner_first_last'][0];
     }
 </style>
 
-<?php get_footer('dashboard'); ?>
+<?php get_footer('dashboard');

@@ -3,11 +3,11 @@
 defined('ABSPATH') ?: exit();
 
 /**
- * Fetches and returns shop meta or false on failure
+ * Fetch shop network ID
  *
- * @return void
+ * @return int shop network id
  */
-function fetch_shop_meta() {
+function fetch_shop_child_site_id() {
 
     // get current site url
     $curr_site_url = get_bloginfo('url');
@@ -31,10 +31,7 @@ function fetch_shop_meta() {
     else :
 
         // get shop id
-        $shop_id = $shops->posts[0];
-
-        // get shop meta
-       return get_post_meta($shop_id);
+        return intval($shops->posts[0]);
 
     endif;
 }

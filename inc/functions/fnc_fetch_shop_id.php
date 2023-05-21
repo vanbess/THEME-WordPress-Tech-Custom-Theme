@@ -3,11 +3,14 @@
 defined('ABSPATH') ?: exit();
 
 /**
- * Fetches and returns shop meta or false on failure
+ * Fetches and returns shop id
  *
- * @return void
+ * @return int $shop_id
  */
-function fetch_shop_meta() {
+function fetch_shop_id() {
+
+    // return error message
+    $err_msg = false;
 
     // get current site url
     $curr_site_url = get_bloginfo('url');
@@ -27,14 +30,14 @@ function fetch_shop_meta() {
 
     // check returned posts (if any)
     if (empty($shops->posts)) :
-        return false;
+        return $err_msg = true;
     else :
 
-        // get shop id
-        $shop_id = $shops->posts[0];
+        // get shop post id
+        $shop_post_id = $shops->posts[0];
 
-        // get shop meta
-       return get_post_meta($shop_id);
+        // get and return actual shop id
+        return $shop_id =  get_post_meta($shop_post_id, 'child_site_id', true);
 
     endif;
 }

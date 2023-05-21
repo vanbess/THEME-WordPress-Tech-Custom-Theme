@@ -12,6 +12,8 @@ define('EXTECH_PATH', __DIR__);
 define('EXTECH_URI', '/wp-content/themes/exceltech');
 define('EXTECH_TDOMAIN', 'extech');
 
+
+
 // restore current blog
 restore_current_blog();
 
@@ -120,3 +122,14 @@ add_action('wp_footer', function () { ?>
         });
     </script>
 <?php });
+
+/**
+ * User related functionality
+ */
+require_once __DIR__ . '/dashboard/users/ajax_add_user.php';
+require_once __DIR__ . '/dashboard/users/ajax_delete_user.php';
+
+/**
+ * QR code related functionality
+ */
+require_once __DIR__ . '/dashboard/qr/ajax_generate_qr_code.php';
