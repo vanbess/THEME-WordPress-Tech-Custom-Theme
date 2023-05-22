@@ -20,8 +20,7 @@
         <!-- if no products -->
         <tr id="prod_list_no_prods" class="align-middle d-none">
             <td colspan="7">
-                <p id="prod_list_no_prods_text" class="bg-warning-subtle p-3 fw-semibold rounded-3 shadow-sm mt-3">
-                </p>
+                <p id="prod_list_no_prods_text" class="bg-warning-subtle p-3 rounded-3 fw-semibold shadow-sm mt-3"></p>
             </td>
         </tr>
     </tbody>
@@ -31,7 +30,7 @@
 <?php
 // get current product count and only display load more button if count > 50
 $prod_count = wp_count_posts('product');
-$total = $prod_count->publish + $prod_count->draft;
+$total      = $prod_count->publish + $prod_count->draft;
 
 if ($total > 50) : ?>
     <!-- load more products -->
@@ -77,12 +76,12 @@ add_action('wp_footer', function () {
                     $.each(products, function(index, product) {
 
                         var img = '<img class="prod_img border" src="' + product.img_url + '" alt="' + product.title + '">';
-                        var title = '<p class="fw-semibold m-0">' + product.title + '</p>';
-                        var sku = '<p class="fw-semibold m-0">' + product.sku + '</p>';
-                        var price = '<p class="fw-semibold m-0">' + product.price + '</p>';
-                        var soh = '<p class="fw-semibold m-0">' + product.soh + '</p>';
-                        var edit = '<a class="edit_prod btn btn-primary" title="click to edit product" target="_blank" href="' + pathname + '?edit_prod=' + index + '">Edit</a>';
-                        var del = '<a class="delete_prod btn btn-danger" title="click to delete product"  data-pid="' + index + '" href="#">Delete</a>';
+                        var title = '<p class="fw-normal m-0">' + product.title + '</p>';
+                        var sku = '<p class="fw-normal m-0">' + product.sku + '</p>';
+                        var price = '<p class="fw-normal m-0">' + product.price + '</p>';
+                        var soh = '<p class="fw-normal m-0">' + product.soh + '</p>';
+                        var edit = '<a class="edit_prod btn btn-primary shadow-sm" title="click to edit product" target="_blank" href="' + pathname + '?edit_prod=' + index + '">Edit</a>';
+                        var del = '<a class="delete_prod btn btn-danger shadow-sm" title="click to delete product"  data-pid="' + index + '" href="#">Delete</a>';
 
                         var row = '<tr class="align-middle"><td>' + img + '</td><td>' + title + '</td><td>' + sku + '</td><td>' + price + '</td><td>' + soh + '</td><td>' + edit + '</td><td>' + del + '</td></tr>';
 

@@ -84,7 +84,7 @@ global $post;
 				<?php echo $post->post_title; ?>
 			</h1>
 
-			<p class="text-body text-body-emphasis text-center mb-5">If you have already <a href="/register/">registered</a>, enter your email address and password below to log into your shop's dashboard.</p>
+			<p class="text-body text-body-emphasis bg-success-subtle p-3 shadow-sm rounded-2 text-center mb-3">If you have already <a href="/register/">registered</a>, enter your email address and password below to log into your shop's dashboard.</p>
 
 			<!-- err msg -->
 			<?php if (isset($error_message)) echo $error_message; ?>
@@ -94,16 +94,16 @@ global $post;
 
 				<!-- email address -->
 				<div class="form-group mb-3">
-					<input type="email" class="form-control" id="user_email" name="user_email" required placeholder="email address*">
+					<input type="email" class="form-control shadow-sm mb-3" id="user_email" name="user_email" required placeholder="email address*">
 				</div>
 
 				<!-- password -->
 				<div class="form-group mb-3">
-					<input type="password" class="form-control" id="user_pass" name="user_pass" required placeholder="password*">
+					<input type="password" class="form-control shadow-sm mb-3" id="user_pass" name="user_pass" required placeholder="password*">
 				</div>
 
 				<!-- submit -->
-				<button type="submit" class="btn btn-primary btn-lg w-100" name="submit">Login</button>
+				<button type="submit" class="btn btn-primary btn-lg w-100 shadow-sm rounded-2" name="submit">Login</button>
 			</form>
 		</div>
 	</div>

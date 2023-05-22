@@ -38,13 +38,12 @@
     <div class="container-fluid">
 
       <!-- brand and home link -->
-      <a class="navbar-brand me-5" href="<?php echo get_site_url(); ?>">
-        <h3 class="text-secondary">
-          Excellerate Tech
-        </h3>
+      <a class="navbar-brand me-5" href="<?php echo get_home_url(); ?>">
+        <img id="logoTop" src="<?php echo EXTECH_URI.'/assets/img/logo-sbs.png'; ?>" alt="Excellerate Technologies">
       </a>
+
       <div class="float-end">
-        <a href="<?php echo get_site_url(). 'dashboard/log-in/' ?>" id="navbar_login" class="btn btn-warning text-uppercase fw-bold" title="Log into your dashboard">Already registered? Log in.</a>
+        <a href="<?php echo get_site_url(). '/dashboard/log-in/' ?>" id="navbar_login" class="text-light pt-2 pe-3" title="Log into your dashboard">Already registered? Log in.</a>
       </div>
     </div>
   </nav>

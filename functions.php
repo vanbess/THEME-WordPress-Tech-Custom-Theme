@@ -12,8 +12,6 @@ define('EXTECH_PATH', __DIR__);
 define('EXTECH_URI', '/wp-content/themes/exceltech');
 define('EXTECH_TDOMAIN', 'extech');
 
-
-
 // restore current blog
 restore_current_blog();
 

@@ -104,25 +104,103 @@ $p_id = $post->ID;
 
             <p class="text-center pb-5"><?php echo get_field('contact_us_text', $p_id); ?></p>
 
-            <form action="#">
+            <?php
+            // process contact submission
+            if (isset($_POST['contact_submit'])) :
+
+                // insert contact post
+                $contact_inserted = wp_insert_post([
+                    'post_type'    => 'contact_request',
+                    'post_status'  => 'publish',
+                    'post_title'   => 'Contact request from ' . $_POST['first_name'] . ' ' . $_POST['last_name'],
+                    'post_content' => ''
+                ]);
+
+                // on error
+                if (is_wp_error($contact_inserted)) : ?>
+                    <p id="formSubbed" style="font-size: 16px;" class="text-center bg-danger-subtle fw-semibold p-2 rounded-2 shadow-sm">
+                        Contact form submission failed. Please reload the page and try again.
+                    </p>
+                <?php
+                // on success
+                else :
+
+                    // update contact meta
+                    update_post_meta($contact_inserted, 'first_name', sanitize_text_field($_POST['first_name']));
+                    update_post_meta($contact_inserted, 'last_name', sanitize_text_field($_POST['last_name']));
+                    update_post_meta($contact_inserted, 'email', sanitize_email($_POST['email']));
+                    update_post_meta($contact_inserted, 'tel', sanitize_text_field($_POST['tel']));
+                    update_post_meta($contact_inserted, 'message', sanitize_textarea_field($_POST['message']));
+
+                    // send email
+                    $subject = 'New contact request received from ' . sanitize_text_field($_POST['first_name']) . ' ' . sanitize_text_field($_POST['last_name']);
+                    $toEmail = 'info@excelleratetech.com';
+                    $respondTo = sanitize_email($_POST['email']);
+                    $msg = '<h3>Good day</h3>';
+                    $msg .= '<p>A new contact form submission was received on the Excellerate Technologies website.</p>';
+                    $msg .= '<p><b><u>SUBMISSION DETAILS:</u></b></p>';
+                    $msg .= '<p><b>First name: </b>' . sanitize_text_field($_POST['first_name']) . '</p>';
+                    $msg .= '<p><b>Last name: </b>' . sanitize_text_field($_POST['last_name']) . '</p>';
+                    $msg .= '<p><b>Email address: </b>' . sanitize_email($_POST['email']) . '</p>';
+                    $msg .= '<p><b>Telephone: </b>' . sanitize_text_field($_POST['tel']) . '</p>';
+                    $msg .= '<p><b><u>Message: </u></b></p>';
+                    $msg .= sanitize_textarea_field($_POST['message']) . PHP_EOL;
+                    $msg .= '<p></p>';
+                    $msg .= '<p><b>You may respond to this person by simply replying to this email. Thanks!</b></p>';
+
+                    $headers = [
+                        'Content-Type: text/html; charset=UTF-8',
+                        'From: Excellerate Technologies Website <website@excelleratetech.com>',
+                        'Reply-To: Reply Address <' . sanitize_email($_POST['email']) . '>',
+                    ];
+
+                    wp_mail($toEmail, $subject, $msg, $headers);
+
+                ?>
+
+                    <p id="formSubbed" style="font-size: 16px;" class="text-center bg-success-subtle fw-semibold p-2 rounded-2 shadow-sm">
+                        Contact form submission successful. We will be in touch within 48 hours. Thanks!
+                    </p>
+
+                <?php endif; ?>
+                <script>
+                    $ = jQuery;
+
+                    $(document).ready(function() {
+                        var elementID = 'formSubbed';
+                        var offset = $('#' + elementID).offset().top - parseInt(150);
+
+                        setTimeout(() => {
+                            $('html, body').animate({
+                                scrollTop: offset
+                            }, 1500);
+                        }, 1000);
+                    });
+                </script>
+
+            <?php 
+            unset($_POST);
+            endif; ?>
+
+            <form action="#" method="post">
 
                 <!-- first name -->
-                <input type="text" name="contact_first_name" id="contact_first_name" class="form-text form-control mb-4" placeholder="your first name*">
+                <input type="text" name="first_name" id="first_name" class="form-text form-control mb-4" placeholder="your first name*" required>
 
                 <!-- last name -->
-                <input type="text" name="contact_last_name" id="contact_last_name" class="form-text form-control mb-4" placeholder="your last name*">
+                <input type="text" name="last_name" id="last_name" class="form-text form-control mb-4" placeholder="your last name*" required>
 
                 <!-- email -->
-                <input type="email" name="contact_email" id="contact_email" class="form-text form-control mb-4" placeholder="your email address*">
+                <input type="email" name="email" id="email" class="form-text form-control mb-4" placeholder="your email address*" required>
 
                 <!-- tel -->
-                <input type="tel" name="contact_tel" id="contact_tel" class="form-text form-control mb-4" placeholder="your contact number*">
+                <input type="tel" name="tel" id="tel" class="form-text form-control mb-4" placeholder="your contact number*" required>
 
                 <!-- message -->
-                <textarea name="contact_msg" id="contact_msg" cols="30" rows="10" class="form-text form-control mb-4" placeholder="your message*"></textarea>
+                <textarea name="message" id="message" cols="30" rows="10" class="form-text form-control mb-4" placeholder="your message*" required></textarea>
 
                 <!-- submiy -->
-                <input type="submit" id="contact_submit" class="btn btn-lg btn-warning d-block w-100 mb-5" value="Send">
+                <input type="submit" id="contact_submit" name="contact_submit" class="btn btn-lg btn-warning d-block w-100 mb-5" value="Send">
 
             </form>
 

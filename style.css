@@ -17,6 +17,11 @@ img.prod_img.border {
     width: 100px;
 }
 
+img#logoTop {
+    max-width: 360px;
+    width: 220px;
+}
+
 .cursor-pointer{
     cursor: pointer;
 }

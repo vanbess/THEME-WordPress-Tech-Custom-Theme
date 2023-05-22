@@ -73,7 +73,7 @@ global $post;
     jQuery(document).ready(function($) {
 
         // Get the current active tab ID
-        var activeTabId = localStorage.getItem('activeTabID');
+        var activeTabId = localStorage.getItem('activeTabID') ? localStorage.getItem('activeTabID') : false;
 
         // If there's a stored active tab ID, set it as active
         if (activeTabId) {
@@ -82,7 +82,7 @@ global $post;
             $('.nav-link').removeClass('active');
 
             $(activeTabId).addClass('show').addClass('active')
-            $(activeTabId+'-tab').addClass('active');
+            $(activeTabId + '-tab').addClass('active');
 
         }
 

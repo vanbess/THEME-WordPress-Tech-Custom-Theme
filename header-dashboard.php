@@ -57,7 +57,7 @@
           <?php if (is_user_logged_in()) : 
             
             // setup logout nonce, redirect url and logout url
-            $rd_url = get_site_url().'dashboard/log-in/';
+            $rd_url = get_site_url().'/dashboard/log-in/';
             $lo_url = wp_logout_url($rd_url);
             
             ?>

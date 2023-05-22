@@ -39,9 +39,7 @@
 
       <!-- brand and home link -->
       <a class="navbar-brand me-5" href="<?php echo get_home_url(); ?>">
-        <h3 class="text-secondary">
-          Excellerate Tech
-        </h3>
+        <img id="logoTop" src="<?php echo EXTECH_URI.'/assets/img/logo-sbs.png'; ?>" alt="Excellerate Technologies">
       </a>
 
       <!-- nav toggler -->
@@ -81,7 +79,7 @@
         </ul>
 
         <div class="d-flex">
-          <a href="<?php echo get_site_url() . '/dashboard/log-in/'; ?>" class="text-decoration-none text-light pt-2 pe-3">Already registered? Log in.</a>
+          <a href="<?php echo get_site_url() . '/dashboard/log-in/'; ?>" class="text-light pt-2 pe-3">Already registered? Log in.</a>
           <a href="<?php echo get_site_url() . '/register'; ?>" id="navbar_register" class="btn btn-warning text-uppercase" title="Register your shop today">Register</a>
         </div>
 
