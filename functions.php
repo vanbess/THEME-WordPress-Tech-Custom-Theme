@@ -128,8 +128,3 @@ add_action('wp_footer', function () { ?>
  */
 require_once __DIR__ . '/dashboard/users/ajax_add_user.php';
 require_once __DIR__ . '/dashboard/users/ajax_delete_user.php';
-
-/**
- * QR code related functionality
- */
-require_once __DIR__ . '/dashboard/qr/ajax_generate_qr_code.php';

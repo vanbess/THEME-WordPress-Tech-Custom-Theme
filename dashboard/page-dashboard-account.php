@@ -75,8 +75,8 @@ restore_current_blog();
 ?>
 
 <!-- Main content -->
-<div id="dashboard-cont" class="container py-5 bg-light mb-n5" style="min-height: 90vh;">
-    <div class="row py-5 account">
+<div id="dashboard-cont" class="container py-5 mb-5" style="min-height: 90vh;">
+    <div class="row py-5 mb-5 account">
 
         <!-- SHOP INFO -->
         <div class="offset-3 col-6 text-start">
@@ -86,50 +86,50 @@ restore_current_blog();
                 <h2 class="mb-3 text-center">Shop info</h2>
 
                 <?php if ($err_msg) : ?>
-                    <p class="text-body bg-danger-subtle fw-normal text-center rounded-3 p-3 mb-3">
+                    <p class="text-body bg-danger-subtle fw-normal text-center rounded-2 p-3 mb-3 shadow-sm">
                         There is no information related to your shop present in our database. This is a technical error. Please contact us to resolve this issue for you.
                     </p>
                 <?php else : ?>
-                    <p class="text-body bg-warning-subtle fw-normal text-center rounded-3 p-3 mb-3 fw-semibold">
+                    <p class="text-body bg-success-subtle fw-normal text-center rounded-2 p-3 mb-3 shadow-sm">
                         Use the inputs below to update your basic shop info as needed. Greyed out inputs cannot be updated.
                     </p>
                 <?php endif; ?>
 
                 <!-- owner first name -->
                 <label for="shop_owner_first_last" class="mb-1 ps-2 fw-semibold"><em>Owner first & last name</em></label>
-                <input type="text" name="shop_owner_first_last" id="shop_owner_first_last" class="form-control bg-body-secondary mb-3" placeholder="owner first and last name" readonly value="<?php echo isset($shop_meta['shop_owner_first_last'][0]) ? $shop_meta['shop_owner_first_last'][0] : ''; ?>">
+                <input type="text" name="shop_owner_first_last" id="shop_owner_first_last" class="form-control bg-body-secondary mb-3 shadow-sm" placeholder="owner first and last name" readonly value="<?php echo isset($shop_meta['shop_owner_first_last'][0]) ? $shop_meta['shop_owner_first_last'][0] : ''; ?>">
 
                 <!-- email -->
                 <label for="shop_owner_email" class="mb-1 ps-2 fw-semibold"><em>Owner email address</em></label>
-                <input type="email" name="shop_owner_email" id="shop_owner_email" class="form-control bg-body-secondary mb-3" placeholder="owner email address" readonly value="<?php echo isset($shop_meta['shop_owner_email'][0]) ? $shop_meta['shop_owner_email'][0] : ''; ?>">
+                <input type="email" name="shop_owner_email" id="shop_owner_email" class="form-control bg-body-secondary mb-3 shadow-sm" placeholder="owner email address" readonly value="<?php echo isset($shop_meta['shop_owner_email'][0]) ? $shop_meta['shop_owner_email'][0] : ''; ?>">
 
                 <!-- tel -->
                 <label for="shop_owner_tel" class="mb-1 ps-2 fw-semibold"><em>Owner telephone number*</em></label>
-                <input type="tel" name="shop_owner_tel" id="shop_owner_tel" class="form-control mb-3" placeholder="owner contact number*" required value="<?php echo isset($shop_meta['shop_owner_tel'][0]) ? $shop_meta['shop_owner_tel'][0] : ''; ?>">
+                <input type="tel" name="shop_owner_tel" id="shop_owner_tel" class="form-control mb-3 shadow-sm" placeholder="owner contact number*" required value="<?php echo isset($shop_meta['shop_owner_tel'][0]) ? $shop_meta['shop_owner_tel'][0] : ''; ?>">
 
                 <!-- franchise name -->
                 <label for="shop_franchise" class="mb-1 ps-2 fw-semibold"><em>Franchise/Brand*</em></label>
-                <input type="text" name="shop_franchise" id="shop_franchise" class="form-control mb-3" placeholder="shop franchise, e.g. Engen, Caltex etc*" required value="<?php echo isset($shop_meta['shop_franchise'][0]) ? $shop_meta['shop_franchise'][0] : ''; ?>">
+                <input type="text" name="shop_franchise" id="shop_franchise" class="form-control mb-3 shadow-sm" placeholder="shop franchise, e.g. Engen, Caltex etc*" required value="<?php echo isset($shop_meta['shop_franchise'][0]) ? $shop_meta['shop_franchise'][0] : ''; ?>">
 
                 <!-- shop name -->
                 <label for="shop_name" class="mb-1 ps-2 fw-semibold"><em>Shop name</em></label>
-                <input type="text" name="shop_name" id="shop_name" class="form-control bg-body-secondary mb-3" placeholder="shop name" readonly value="<?php echo isset($shop_meta['shop_name'][0]) ? $shop_meta['shop_name'][0] : ''; ?>">
+                <input type="text" name="shop_name" id="shop_name" class="form-control bg-body-secondary mb-3 shadow-sm" placeholder="shop name" readonly value="<?php echo isset($shop_meta['shop_name'][0]) ? $shop_meta['shop_name'][0] : ''; ?>">
 
                 <!-- street name and number -->
                 <label for="shop_street_number" class="mb-1 ps-2 fw-semibold"><em>Street number & name*</em></label>
-                <input type="text" name="shop_street_number" id="shop_street_number" class="form-control mb-3" placeholder="street name and number*" required value="<?php echo isset($shop_meta['shop_street_number'][0]) ? $shop_meta['shop_street_number'][0] : ''; ?>">
+                <input type="text" name="shop_street_number" id="shop_street_number" class="form-control mb-3 shadow-sm" placeholder="street name and number*" required value="<?php echo isset($shop_meta['shop_street_number'][0]) ? $shop_meta['shop_street_number'][0] : ''; ?>">
 
                 <!-- suburb -->
                 <label for="shop_suburb" class="mb-1 ps-2 fw-semibold"><em>Suburb*</em></label>
-                <input type="text" name="shop_suburb" id="shop_suburb" class="form-control mb-3" placeholder="suburb*" required value="<?php echo isset($shop_meta['shop_suburb'][0]) ? $shop_meta['shop_suburb'][0] : ''; ?>">
+                <input type="text" name="shop_suburb" id="shop_suburb" class="form-control mb-3 shadow-sm" placeholder="suburb*" required value="<?php echo isset($shop_meta['shop_suburb'][0]) ? $shop_meta['shop_suburb'][0] : ''; ?>">
 
                 <!-- city or town -->
                 <label for="shop_city" class="mb-1 ps-2 fw-semibold"><em>City or town*</em></label>
-                <input type="text" name="shop_city" id="shop_city" class="form-control mb-3" placeholder="city or town*" required value="<?php echo isset($shop_meta['shop_city'][0]) ? $shop_meta['shop_city'][0] : ''; ?>">
+                <input type="text" name="shop_city" id="shop_city" class="form-control mb-3 shadow-sm" placeholder="city or town*" required value="<?php echo isset($shop_meta['shop_city'][0]) ? $shop_meta['shop_city'][0] : ''; ?>">
 
                 <!-- province -->
                 <label for="shop_province" class="mb-1 ps-2 fw-semibold"><em>Province*</em></label>
-                <select class="form-control mb-3" id="shop_province" name="shop_province" required>
+                <select class="form-control mb-3 shadow-sm" id="shop_province" name="shop_province" required>
 
                     <?php
                     $opts = [
@@ -161,21 +161,14 @@ restore_current_blog();
 
                 <!-- postal code -->
                 <label for="shop_postal" class="mb-1 ps-2 fw-semibold"><em>Postal code*</em></label>
-                <input type="text" name="shop_postal" id="shop_postal" class="form-control mb-4" placeholder="postal code*" required value="<?php echo isset($shop_meta['shop_postal'][0]) ? $shop_meta['shop_postal'][0] : ''; ?>">
+                <input type="text" name="shop_postal" id="shop_postal" class="form-control mb-4 shadow-sm" placeholder="postal code*" required value="<?php echo isset($shop_meta['shop_postal'][0]) ? $shop_meta['shop_postal'][0] : ''; ?>">
 
                 <?php if ($err_msg) : ?>
                     <!-- submit -->
-                    <button type="submit" class="btn btn-primary btn-md w-100" data-bs-toggle="tooltip" data-bs-placement="top" title="You're not allowed to perform this action until the error mentioned above has been resolved" name="update-shop-info" id="update-shop-info" value="Update shop info">some text here</button>
-
-                    <div class="tooltip" role="tooltip">
-                        <div class="tooltip-arrow"></div>
-                        <div class="tooltip-inner">
-                            Tooltip text
-                        </div>
-                    </div>
+                    <button type="submit" class="btn btn-primary btn-md w-100 shadow-sm" data-bs-toggle="tooltip" data-bs-placement="top" title="You're not allowed to perform this action until the error mentioned above has been resolved" name="update-shop-info" id="update-shop-info" value="Update shop info">some text here</button>
                 <?php else : ?>
                     <!-- submit -->
-                    <input type="submit" class="btn btn-primary btn-md w-100" name="update-shop-info" id="update-shop-info" value="Update shop info">
+                    <input type="submit" class="btn btn-primary btn-md w-100 shadow-sm" name="update-shop-info" id="update-shop-info" value="Update shop info">
                 <?php endif; ?>
 
             </form>

@@ -15,42 +15,53 @@ $shop_id   = $shop_dets->blog_id;
 
 ?>
 
+<script id="qrCodeJs" src="<?php echo EXTECH_URI . '/lib/qrcode.js/qrcode.min.js' ?>"></script>
+
 <!-- Main content -->
 <div id="dashboard-cont" class="container mt-5" style="min-height: 90vh;">
-    <div class="row qr-code">
-        <div class="offset-3 col-6 mt-5">
+    <div class="row qr-code mb-5 pb-5">
+        <div class="offset-3 col-6 mt-5 mb-5 pb-5">
 
             <p class="bg-success-subtle p-3 rounded-2 shadow-sm text-center mb-4 fw-semibold">
-                The QR code for your store will appear here. If you do not see a QR code, click on the Generate QR Code button to generate one.
+                The QR code for your store will appear here. Simply right click on it and select "Save image as..." to save it to your phone or computer. You can then print the QR code so that customers can scan it with their phones to be redirected to your shop.
             </p>
 
-            <?php if (get_option('qr_code_img')) : ?>
-                qr code image here
-            <?php else : ?>
-                <button class="btn btn-primary btn-lg w-100" onclick="generateQR(event, '<?php echo $shop_url; ?>', '<?php echo $shop_id; ?>')" title="Click to generate the QR code for your shop">Generate QR Code</button>
-            <?php endif; ?>
+            <div id="qrCode" style="cursor: pointer;" class="position-relative">
+                <a href="" id="downloadQR" onclick="downloadQR(event)" class="btn btn-primary w-100 rounded-0 position-absolute shadow-sm" title="click to download QR code" download>Click to Download</a>
+            </div>
 
         </div>
     </div>
 </div>
 
+<!-- generate QR code -->
 <script>
     $ = jQuery;
 
-    // generate QR
-    function generateQR(event, shop_url, shop_id) {
-        
-        data = {
-            '_ajax_nonce': '<?php echo wp_create_nonce('generate shop QR') ?>',
-            'action': 'extech_generate_qr',
-            'shop_id': shop_id,
-            'shop_url': shop_url
-        }
+    // generate
+    var qrcode = new QRCode(document.getElementById("qrCode"), {
+        text: "<?php echo $shop_url; ?>",
+        width: 1024,
+        height: 1024,
+        useSVG: false
+    });
 
-        $.post('<?php echo admin_url('admin-ajax.php'); ?>', data, function(response) {
-            console.log(response)
-        })
+    // download QR coce
+    function downloadQR(event) {
+
+        var dlBtn = $(event.target);
+
+        var imgSrc = $('#qrCode > img').attr('src');
+        dlBtn.attr('href', imgSrc);
+
+
     }
 </script>
+
+<style>
+    #qrCode>img {
+        width: 100%;
+    }
+</style>
 
 <?php get_footer('dashboard'); ?>
