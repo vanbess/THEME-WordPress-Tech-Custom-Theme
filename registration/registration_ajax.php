@@ -343,6 +343,16 @@ function process_shop_registration() {
             'page_template' => 'dashboard/page-dashboard-login.php',   // Set the page template
             'post_name'     => 'log-in'
         ),
+        array(
+            'post_title'    => 'Orders',
+            'post_content'  => '',
+            'post_status'   => 'publish',
+            'post_author'   => 1,
+            'post_type'     => 'page',
+            'post_parent'   => $parent_id,
+            'page_template' => 'dashboard/page-dashboard-orders.php',   // Set the page template
+            'post_name'     => 'shop-orders'
+        ),
     );
 
     // Insert the child pages

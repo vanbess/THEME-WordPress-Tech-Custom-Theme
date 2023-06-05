@@ -10,6 +10,12 @@
 
 <body>
 
+  <?php 
+  // bail early if woocommerce shop
+  if (is_shop()) : ?>
+    <?php return; ?>
+  <?php endif; ?>
+
   <!-- contact bar top -->
   <div id="contact-bar-top" class="container-fluid bg-dark-subtle">
     <div class="row py-1">
@@ -39,7 +45,7 @@
 
       <!-- brand and home link -->
       <a class="navbar-brand me-5" href="<?php echo get_home_url(); ?>">
-        <img id="logoTop" src="<?php echo EXTECH_URI.'/assets/img/logo-sbs.png'; ?>" alt="Excellerate Technologies">
+        <img id="logoTop" src="<?php echo EXTECH_URI . '/assets/img/logo-sbs.png'; ?>" alt="Excellerate Technologies">
       </a>
 
       <!-- nav toggler -->

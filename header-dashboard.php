@@ -33,6 +33,11 @@
             <a class="nav-link active" href="<?php echo get_site_url() ?>/dashboard/">Home</a>
           </li>
 
+          <!-- Orders -->
+          <li class="nav-item">
+            <a class="nav-link" href="<?php echo get_site_url() ?>/dashboard/shop-orders/">Orders</a>
+          </li>
+
           <!-- QR code -->
           <li class="nav-item">
             <a class="nav-link" href="<?php echo get_site_url() ?>/dashboard/qr-code/">QR Code</a>

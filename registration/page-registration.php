@@ -26,7 +26,7 @@ global $post;
                 <p class="text-center mb-0">
                     Fill out the form below to register your shop.
                 </p>
-    
+
                 <p class="text-center text-danger mb-0">
                     <strong>Note that all fields are required.</strong>
                 </p>
@@ -185,18 +185,21 @@ global $post;
             // if inputs and checkboxes are empty/not checked
             if (!isValid && !termsChecked) {
                 alert('Please fill in all required fields and accept all policies and terms before attempting to register your shop.')
+                $('#register').val('Register');
                 return false;
             }
 
             // if inputs are empty
             if (!isValid) {
                 alert('Please fill in all required fields (*).')
+                $('#register').val('Register');
                 return false;
             }
 
             // if any terms aren't checked
             if (!termsChecked) {
                 alert('Please accept all our terms and conditions before attempting to register your shop.');
+                $('#register').val('Register');
                 return false;
             }
 
@@ -214,12 +217,15 @@ global $post;
                 contentType: false,
                 success: function(response) {
                     $('#reg-msg').text(response).removeClass('d-none');
+                    $('.bg-success-subtle').addClass('d-none');
+                    $('#register').val('Register');
                     $('html, body').animate({
                         scrollTop: 0
                     }, 'fast');
                 },
                 error: function(xhr, status, error) {
                     $('#reg-msg').addClass('alert-warning').text('Error: ' + xhr.responseText).removeClass('d-none');
+                    $('.bg-success-subtle').addClass('d-none');
                 }
             });
         });

@@ -30,6 +30,11 @@ add_action('wp_enqueue_scripts', function () {
     wp_enqueue_script('jq-tablesorter', EXTECH_URI . '/assets/js/tablesorter.min.js', ['jquery'], 'v2.31.3', true);
 });
 
+// Add WooCommerce support
+add_action('after_setup_theme', function(){
+    add_theme_support('woocommerce');
+});
+
 // fix upload size limit nonsense
 function filter_site_upload_size_limit($size) {
     // Set the upload size limit to 10 MB for users lacking the 'manage_options' capability.
@@ -126,3 +131,13 @@ add_action('wp_footer', function () { ?>
  */
 require_once __DIR__ . '/dashboard/users/ajax_add_user.php';
 require_once __DIR__ . '/dashboard/users/ajax_delete_user.php';
+
+remove_action('woocommerce_before_shop_loop_item_title', 'woocommerce_template_loop_product_thumbnail', 10);
+
+add_action('woocommerce_before_shop_loop_item_title', function(){
+
+    echo '<div class="border-3 border-dark-subtle rounded-2 shadow-sm">';
+    echo woocommerce_template_loop_product_thumbnail();
+    echo '</div>';
+
+});

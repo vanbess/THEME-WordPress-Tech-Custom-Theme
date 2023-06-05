@@ -45,7 +45,7 @@ $results = $wpdb->get_results($query);
     <div class="row">
         <div id="sales-overview" class="col-md-12">
 
-            <p class="bg-success-subtle text-center p-3 rounded-2 shadow-sm mb-4">
+            <p class="bg-success-subtle text-center p-3 fw-semibold rounded-2 shadow-sm mb-4">
                 <b>Welcome to your shop dashboard!</b><br>Below you will find a breakdown of your total sales for the last month. Note that days without sales are skipped. You can click on any of the table headings to sort the table according to the corresponding table column values.
             </p>
 
