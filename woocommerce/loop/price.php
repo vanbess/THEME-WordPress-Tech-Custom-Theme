@@ -34,5 +34,5 @@ endif;
 ?>
 
 <?php if ($price_html = $product->get_price_html()) : ?>
-	<span class="d-block text-center fw-semibold text-decoration-none text-body"><?php echo $price_html; ?></span>
+	<span class="shop-loop-price d-block"><?php echo $price_html; ?></span>
 <?php endif; ?>

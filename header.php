@@ -10,11 +10,18 @@
 
 <body>
 
-  <?php 
-  // bail early if woocommerce shop
-  if (is_shop()) : ?>
-    <?php return; ?>
-  <?php endif; ?>
+  <?php
+
+  // check if is child site in multisite
+  if (is_multisite() && !is_main_site()) :
+
+    // bail early if woocommerce shop
+    if (function_exists('is_shop') && is_shop()) :
+      return;
+    endif;
+  endif;
+
+  ?>
 
   <!-- contact bar top -->
   <div id="contact-bar-top" class="container-fluid bg-dark-subtle">

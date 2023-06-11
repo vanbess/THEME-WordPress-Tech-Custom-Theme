@@ -22,12 +22,32 @@ img#logoTop {
     width: 220px;
 }
 
-.cursor-pointer{
+.cursor-pointer {
     cursor: pointer;
 }
 
-.cursor-not-allowed{
+.cursor-not-allowed {
     cursor: not-allowed;
+}
+
+.product-img-cont {
+    border: 1px solid #ccc;
+    overflow: hidden;
+    border-radius: 5px;
+}
+
+h2.woocommerce-loop-product__title {
+    text-align: center;
+    line-height: 3;
+    font-size: 1.4em;
+}
+
+span.shop-loop-price.d-block {
+    text-align: center;
+    font-size: 1.2em;
+    font-weight: 500;
+    color: #666;
+    padding-bottom: 2em;
 }
 
 .prod_table_th {
@@ -51,7 +71,7 @@ div#contact-bar-top {
     font-size: 0.85rem !important;
 }
 
-.font-italic{
+.font-italic {
     font-style: italic;
 }
 
@@ -83,7 +103,7 @@ div#intro_banner_text {
     border-radius: 10px;
 }
 
-div#intro_banner_text > h1 {
+div#intro_banner_text>h1 {
     line-height: 1.5em;
 }
 
@@ -100,4 +120,8 @@ div#intro_banner_text > h1 {
 
 div#intro_banner {
     min-height: 600px;
+}
+
+div#shop_loop_cont {
+    min-height: 100vh;
 }

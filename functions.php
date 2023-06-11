@@ -136,8 +136,27 @@ remove_action('woocommerce_before_shop_loop_item_title', 'woocommerce_template_l
 
 add_action('woocommerce_before_shop_loop_item_title', function(){
 
-    echo '<div class="border-3 border-dark-subtle rounded-2 shadow-sm">';
+    echo '<div class="product-img-cont">';
     echo woocommerce_template_loop_product_thumbnail();
     echo '</div>';
 
 });
+
+/**
+ * Redirect login logo to home page
+ */
+add_filter('login_headerurl', function () {
+    return home_url();
+});
+
+// remove product single link from products in shop loop
+remove_action('woocommerce_before_shop_loop_item', 'woocommerce_template_loop_product_link_open', 10);
+
+// add additional classes to product shop loop add to cart link
+add_filter('woocommerce_loop_add_to_cart_link', function ($link, $product, $args) {
+
+    $link = str_replace('class="', 'class="btn btn-primary w-100 fw-semibold fs-6 text-uppercase shadow-sm ', $link);
+
+    return $link;
+}, 10, 3);
+

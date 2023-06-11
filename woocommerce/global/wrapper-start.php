@@ -22,6 +22,6 @@ if (!defined('ABSPATH')) {
 
 $template = wc_get_theme_slug_for_templates(); ?>
 
-<div id="shop_loop_cont" class="container">
+<div id="shop_loop_cont" class="container mt-5">
 
-	<div id="shop_loop_row" class="row">
+	<div id="shop_loop_row" class="row position-relative">
