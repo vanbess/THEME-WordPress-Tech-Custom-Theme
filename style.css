@@ -13,6 +13,62 @@ License URI: http://www.gnu.org/licenses/gpl-2.0.html
 Text Domain: extech
 */
 
+/* pulsing animation for new orders badge */
+.animate__pulse {
+    -webkit-animation-name: animate__pulse;
+    animation-name: animate__pulse;
+}
+
+@-webkit-keyframes animate__pulse {
+    0% {
+        -webkit-transform: scale(1);
+        transform: scale(1);
+    }
+
+    50% {
+        -webkit-transform: scale(1.1);
+        transform: scale(1.1);
+    }
+
+    100% {
+        -webkit-transform: scale(1);
+        transform: scale(1);
+    }
+}
+
+@keyframes animate__pulse {
+    0% {
+        -webkit-transform: scale(1);
+        transform: scale(1);
+    }
+
+    50% {
+        -webkit-transform: scale(1.1);
+        transform: scale(1.1);
+    }
+
+    100% {
+        -webkit-transform: scale(1);
+        transform: scale(1);
+    }
+}
+
+/* infinite animation */
+.animate__infinite {
+    -webkit-animation-iteration-count: infinite;
+    animation-iteration-count: infinite;
+    -webkit-animation-duration: 1.5s;
+    animation-duration: 1.5s;
+}
+
+/* animate animated */
+.animate__animated {
+    -webkit-animation-duration: 1s;
+    animation-duration: 1s;
+    -webkit-animation-fill-mode: both;
+    animation-fill-mode: both;
+}
+
 img.prod_img.border {
     width: 100px;
 }

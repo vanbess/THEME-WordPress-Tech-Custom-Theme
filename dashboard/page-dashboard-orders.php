@@ -58,7 +58,7 @@ $orders = $wpdb->get_results($query);
 
             <p class="bg-success-subtle p-2 rounded-2 shadow-sm fw-semibold text-center mb-4">The table below contains a list of recently received orders.</p>
 
-            <table class="table table-bordered table-striped">
+            <table id="orders_table" class="table table-bordered table-striped">
 
                 <!-- order table-->
                 <thead class="bg-dark-subtle text-center rounded-1 mb-2">
@@ -138,7 +138,7 @@ $orders = $wpdb->get_results($query);
                     <hr class="mt-0 mb-4">
 
                     <!-- line items table -->
-                    <table class="table table-bordered table-striped">
+                    <table id="line_items_table" class="table table-bordered table-striped">
 
                         <!-- line items table header -->
                         <thead class="bg-dark-subtle text-center rounded-1 mb-2">
@@ -294,10 +294,10 @@ $orders = $wpdb->get_results($query);
                 blog_id: '<?php echo $shop_id; ?>',
             },
             success: function(data) {
-               
-                if(data.success){
+
+                if (data.success) {
                     alert(data.data);
-                }else{
+                } else {
                     alert(data.data);
                 }
 
@@ -311,6 +311,8 @@ $orders = $wpdb->get_results($query);
         });
 
     }
+
+   
 </script>
 
 <?php get_footer('dashboard');

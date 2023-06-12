@@ -243,8 +243,11 @@ add_filter('woocommerce_order_item_permalink', function ($link, $item, $order) {
 // add additional classes to order thank you page text
 add_filter('woocommerce_thankyou_order_received_text', function ($text) {
 
+    // get shop url
+    $shop_url = get_permalink(wc_get_page_id('shop'));
+
     // add additional classes to text
-    $text = '<p class="text-center fw-bold fs-6 mb-5 text-text-black-50 p-2 rounded-2 shadow-sm bg-success-subtle">Thank you, your order has been received. Our staff members are currently picking and packing your items and will bring it to your vehicle soon. Thank you for your support and patience!</p>';
+    $text = '<p class="text-center fw-bold fs-6 mb-5 text-black-50 p-2 rounded-2 shadow-sm bg-success-subtle">Thank you, your order has been received. Our staff members are currently picking and packing your items and will bring it to your vehicle soon. Thank you for your support and patience! <a href="'.$shop_url.'">Return to shop</a></p>';
 
     return $text;
 }, 10, 1);
@@ -255,9 +258,9 @@ add_filter('woocommerce_thankyou_order_received_text', function ($text) {
 include_once EXTECH_PATH . '/dashboard/orders/ajax_fetch_orders.php';
 
 /**
- * Check for new orders every 30 seconds, append badge to orders menu item if new orders exist and/or update badge order count and play sound
+ * Check for new orders hook - works via cookie and JS
  */
-include_once EXTECH_PATH . '/dashboard/orders/ajax_check_new_orders.php';
+include_once EXTECH_PATH . '/dashboard/orders/check_new_order_hook.php';
 
 /**
  * Mark order as complete

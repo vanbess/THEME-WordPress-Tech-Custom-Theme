@@ -15,8 +15,20 @@ global $post;
     <div class="row products">
         <div class="col-12">
 
-            <div class="container mt-5">
+            <div class="container mt-5 mb-5">
 
+                <!-- Nav tabs -->
+                <ul class="nav nav-tabs" id="ordersTab" role="tablist">
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link active fw-semibold" id="add-product-tab" data-bs-toggle="tab" data-bs-target="#add-product" type="button" role="tab" aria-controls="add-product" aria-selected="true">Add Product</button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link fw-semibold" id="import-products-tab" data-bs-toggle="tab" data-bs-target="#import-products" type="button" role="tab" aria-controls="import-products" aria-selected="false">Import Products</button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link fw-semibold" id="all-products-tab" data-bs-toggle="tab" data-bs-target="#all-products" type="button" role="tab" aria-controls="all-products" aria-selected="false">All Products</button>
+                    </li>
+                </ul>
                 <?php
                 // if edit prod request
                 if (isset($_GET['edit_prod'])) : ?>
@@ -29,34 +41,17 @@ global $post;
                 // if standard request
                 else : ?>
 
-                    <!-- Nav tabs -->
-                    <ul class="nav nav-tabs" id="myTab" role="tablist">
-                        <li class="nav-item" role="presentation">
-                            <button class="nav-link active fw-semibold" id="add-product-tab" data-bs-toggle="tab" data-bs-target="#add-product" type="button" role="tab" aria-controls="add-product" aria-selected="true">Add Product</button>
-                        </li>
-                        <li class="nav-item" role="presentation">
-                            <button class="nav-link fw-semibold" id="import-products-tab" data-bs-toggle="tab" data-bs-target="#import-products" type="button" role="tab" aria-controls="import-products" aria-selected="false">Import Products</button>
-                        </li>
-                        <li class="nav-item" role="presentation">
-                            <button class="nav-link fw-semibold" id="all-products-tab" data-bs-toggle="tab" data-bs-target="#all-products" type="button" role="tab" aria-controls="all-products" aria-selected="false">All Products</button>
-                        </li>
-                    </ul>
-
                     <!-- Tab panes -->
-                    <div class="tab-content mb-5 pb-5" id="productContent">
-
-                        <!-- Add Product Form -->
-                        <div class="tab-pane fade show active p-5 bg-light rounded-bottom-3 mb-5 border-dark" id="add-product" role="tabpanel" aria-labelledby="add-product-tab">
+                    <div class="tab-content p-5 mb-5">
+                        <div class="tab-pane active" id="add-product" role="tabpanel" aria-labelledby="add-product-tab">
                             <?php include __DIR__ . '/products/add_product.php' ?>
                         </div>
 
-                        <!-- Import Products Form -->
-                        <div class="tab-pane fade p-5 bg-light rounded-bottom-3 mb-5" id="import-products" role="tabpanel" aria-labelledby="import-products-tab">
+                        <div class="tab-pane" id="import-products" role="tabpanel" aria-labelledby="import-products-tab">
                             <?php include __DIR__ . '/products/import_products.php' ?>
                         </div>
 
-                        <!-- All Products Table -->
-                        <div class="tab-pane fade pe-5 ps-5 pt-5 pb-2 bg-light rounded-bottom-3 mb-5" id="all-products" role="tabpanel" aria-labelledby="all-products-tab">
+                        <div class="tab-pane" id="all-products" role="tabpanel" aria-labelledby="all-products-tab">
                             <?php include __DIR__ . '/products/product_table.php' ?>
                         </div>
                     </div>
@@ -69,30 +64,35 @@ global $post;
     </div>
 </div>
 
-<script id="set_previous_tab_on_reload">
-    jQuery(document).ready(function($) {
+<script>
+    $ = jQuery;
 
-        // Get the current active tab ID
-        var activeTabId = localStorage.getItem('activeTabID') ? localStorage.getItem('activeTabID') : false;
-
-        // log active tab id
-        console.log(activeTabId);
-
-        // If there's a stored active tab ID, trigger click on it's corresponding tab and make sure other tabs and tab panes are hidden
-        if (activeTabId) {
-            $('#myTab .nav-link').removeClass('active');
-            $('#myTab .nav-link[data-bs-target="' + activeTabId + '"]').addClass('active');
-            $('#productContent .tab-pane').removeClass('show active');
-            $('#productContent .tab-pane' + activeTabId).addClass('show active');
-        }
-        
-        // Store last selected tab
-        $('#myTab .nav-link').click(function(event) {
-            var active_tab_id = $(this).data('bs-target');
-            localStorage.setItem('activeTabID', active_tab_id);
-        });
-
+    // load add product tab pane on page load
+    $(document).ready(function() {
+        $('#add-product-tab').click();
     });
+
+    // hide/show bootstrap tabs on click
+    $('#ordersTab a').on('click', function(e) {
+
+        e.preventDefault()
+
+        // hide all tabs
+        $('#ordersTab a').removeClass('active');
+
+        // show clicked tab
+        $(this).tab('show')
+
+        // add active class to clicked tab
+        $(this).addClass('active');
+
+        // hide all tab panes
+        $('.tab-pane').removeClass('active');
+
+        // show clicked tab pane
+        $($(this).attr('href')).addClass('active');
+
+    })
 </script>
 
 <?php get_footer('dashboard'); ?>

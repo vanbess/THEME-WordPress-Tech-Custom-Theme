@@ -38,7 +38,21 @@
             <a class="nav-link orders" href="<?php echo get_site_url() ?>/dashboard/shop-orders/">
               Orders
             </a>
-            <span id="new_orders" class="badge bg-danger rounded-pill position-absolute" title="you have new orders waiting to be processed">1</span>
+
+            <?php
+
+            // check for new orders using wc_get_orders() and display new_orders badge if found
+            $orders = wc_get_orders(array(
+              'limit'  => -1,
+              'status' => ['processing', 'on-hold'],
+            ));
+
+            // if orders, get order count
+            if ($orders) {
+              $order_count = count($orders); ?>
+              <span id="new_orders" class="badge bg-danger rounded-pill position-absolute animate__pulse animate__infinite animate__animated" title="you have new orders waiting to be processed"><?php echo $order_count ?></span>
+            <?php } ?>
+
           </li>
 
           <!-- QR code -->
