@@ -18,37 +18,36 @@ switch_to_blog($shop_id);
 // query orders
 global $wpdb;
 
-$query = "SELECT p.ID AS order_id,
-           pm1.meta_value AS first_name,
-           pm2.meta_value AS last_name,
-           pm3.meta_value AS email,
-           pm4.meta_value AS phone_number,
-           pm5.meta_value AS order_total,
-           pm6.meta_value AS order_status,
-           GROUP_CONCAT(DISTINCT CONCAT(pm7.meta_value, ' x ', pm8.meta_value) SEPARATOR ', ') AS order_items
-    FROM {$wpdb->prefix}posts AS p
-    INNER JOIN {$wpdb->prefix}postmeta AS pm1 ON (p.ID = pm1.post_id AND pm1.meta_key = '_billing_first_name')
-    INNER JOIN {$wpdb->prefix}postmeta AS pm2 ON (p.ID = pm2.post_id AND pm2.meta_key = '_billing_last_name')
-    INNER JOIN {$wpdb->prefix}postmeta AS pm3 ON (p.ID = pm3.post_id AND pm3.meta_key = '_billing_email')
-    INNER JOIN {$wpdb->prefix}postmeta AS pm4 ON (p.ID = pm4.post_id AND pm4.meta_key = '_billing_phone')
-    INNER JOIN {$wpdb->prefix}postmeta AS pm5 ON (p.ID = pm5.post_id AND pm5.meta_key = '_order_total')
-    INNER JOIN {$wpdb->prefix}postmeta AS pm6 ON (p.ID = pm6.post_id AND pm6.meta_key = '_order_status')
-    INNER JOIN {$wpdb->prefix}woocommerce_order_items AS oi ON (p.ID = oi.order_id)
-    INNER JOIN {$wpdb->prefix}woocommerce_order_itemmeta AS oim1 ON (oi.order_item_id = oim1.order_item_id AND oim1.meta_key = '_product_id')
-    INNER JOIN {$wpdb->prefix}woocommerce_order_itemmeta AS oim2 ON (oi.order_item_id = oim2.order_item_id AND oim2.meta_key = '_qty')
-    INNER JOIN {$wpdb->prefix}postmeta AS pm7 ON (oim1.meta_value = pm7.post_id AND pm7.meta_key = '_sku')
-    INNER JOIN {$wpdb->prefix}postmeta AS pm8 ON (oim2.order_item_id = pm8.post_id AND pm8.meta_key = '_qty')
+// Define the table names
+$table_posts = $wpdb->posts;
+$table_postmeta = $wpdb->postmeta;
+
+// Define the meta keys for the desired fields
+$meta_keys = array(
+    '_billing_first_name',
+    '_billing_last_name',
+    '_billing_email',
+    '_billing_phone',
+    '_order_total',
+);
+
+// Prepare the query
+$query = $wpdb->prepare("
+    SELECT p.ID, 
+           MAX(CASE WHEN pm.meta_key = %s THEN pm.meta_value END) AS first_name,
+           MAX(CASE WHEN pm.meta_key = %s THEN pm.meta_value END) AS last_name,
+           MAX(CASE WHEN pm.meta_key = %s THEN pm.meta_value END) AS email,
+           MAX(CASE WHEN pm.meta_key = %s THEN pm.meta_value END) AS phone,
+           MAX(CASE WHEN pm.meta_key = %s THEN pm.meta_value END) AS total
+    FROM $table_posts p
+    LEFT JOIN $table_postmeta pm ON p.ID = pm.post_id
     WHERE p.post_type = 'shop_order'
     GROUP BY p.ID
-    ORDER BY p.post_date DESC";
+    ORDER BY p.ID DESC
+", $meta_keys[0], $meta_keys[1], $meta_keys[2], $meta_keys[3], $meta_keys[4]);
 
-
+// return orders
 $orders = $wpdb->get_results($query);
-
-// echo '<pre>';
-// print_r($orders);
-// echo '</pre>';
-
 
 ?>
 
@@ -71,6 +70,7 @@ $orders = $wpdb->get_results($query);
                         <th scope="col" class="order-table-th fw-semibold text-decoration-underline cursor-pointer" title="click to sort by order total">Total</th>
                         <th scope="col" class="order-table-th fw-semibold text-decoration-underline cursor-pointer" title="click to sort by order status">Order Status</th>
                         <th scope="col" class="order-table-th fw-semibold">View Items</th>
+                        <th scope="col" class="order-table-th fw-semibold">Mark Complete</th>
                     </tr>
                 </thead>
 
@@ -86,14 +86,29 @@ $orders = $wpdb->get_results($query);
 
                         <?php foreach ($orders as $order) : ?>
                             <tr class="align-bottom">
-                                <td class="align-middle"></td>
-                                <td class="align-middle"></td>
-                                <td class="align-middle"></td>
-                                <td class="align-middle"></td>
-                                <td class="align-middle"></td>
-                                <td class="align-middle"></td>
+                                <td class="align-middle"><?php echo $order->ID; ?></td>
+                                <td class="align-middle"><?php echo $order->first_name . ' ' . $order->last_name; ?></td>
+                                <td class="align-middle"><?php echo $order->email; ?></td>
+                                <td class="align-middle"><?php echo $order->phone; ?></td>
+                                <td class="align-middle"><?php echo $order->total; ?></td>
                                 <td class="align-middle">
-                                    <button class="btn btn-primary" onclick="viewOrderItems(event)">View Items</button>
+                                    <?php
+                                    // get order status from order id
+                                    $order_status = get_post_status($order->ID);
+                                    // echo Woocommerce order status
+                                    echo wc_get_order_status_name($order_status);
+                                    ?>
+                                </td>
+                                <td class="align-middle">
+                                    <button class="btn btn-primary" title="click to view order items" onclick="viewOrderItems(event, '<?php echo $order->ID; ?>')">View Items</button>
+                                </td>
+                                <td class="align-middle">
+                                    <!-- if order status is not yet complete, add button to mark complete, else add same button but disable it -->
+                                    <?php if ($order_status != 'wc-completed') : ?>
+                                        <button class="btn btn-secondary" title="click to mark order completed" onclick="markComplete(event, '<?php echo $order->ID; ?>')">Mark Complete</button>
+                                    <?php else : ?>
+                                        <button class="btn btn-success bg-success-subtle text-black-50 fw-semibold" disabled>Marked Complete</button>
+                                    <?php endif; ?>
                                 </td>
                             </tr>
                         <?php endforeach; ?>
@@ -104,6 +119,51 @@ $orders = $wpdb->get_results($query);
             </table>
 
         </div>
+
+        <!-- order line items modal overlay -->
+        <div id="order_line_items_modal_overlay" class="d-none position-fixed"></div>
+
+        <!-- order line items modal -->
+        <div id="order_line_items_modal" class="d-none position-absolute pt-4 pe-4 pb-4 ps-4 bg-white text-text-center w-50 rounded-1">
+
+            <!-- title -->
+            <div class="row">
+                <div class="col-md-12">
+
+                    <!-- close modal button -->
+                    <button type="button" class="btn-close float-end" aria-label="Close" onclick="closeModal(event)"></button>
+
+                    <h3 class="text-center pb-4">Order Line Items</h3>
+
+                    <hr class="mt-0 mb-4">
+
+                    <!-- line items table -->
+                    <table class="table table-bordered table-striped">
+
+                        <!-- line items table header -->
+                        <thead class="bg-dark-subtle text-center rounded-1 mb-2">
+                            <tr>
+                                <th scope="col" class="fw-semibold">Product ID</th>
+                                <th scope="col" class="fw-semibold">Image</th>
+                                <th scope="col" class="fw-semibold">Product Name</th>
+                                <th scope="col" class="fw-semibold">Quantity</th>
+                                <th scope="col" class="fw-semibold">Price</th>
+                                <th scope="col" class="fw-semibold">Total</th>
+                            </tr>
+                        </thead>
+
+                        <!-- line items table body -->
+                        <tbody id="order_line_items_body" class="text-center">
+
+                        <tbody>
+
+                    </table>
+
+                </div>
+            </div>
+
+        </div>
+
     </div>
 </div>
 
@@ -122,15 +182,135 @@ $orders = $wpdb->get_results($query);
     $ = jQuery;
 
     // View order items
-    function viewOrderItems(event) {
+    function viewOrderItems(event, order_id) {
 
         event.preventDefault();
 
+        // get order line items using standard wordpress ajax
+        $.ajax({
+            url: '<?php echo admin_url('admin-ajax.php'); ?>',
+            type: 'POST',
+            data: {
+                action: 'extech_get_order_line_items',
+                nonce: '<?php echo wp_create_nonce('extech_get_order_line_items'); ?>',
+                order_id: order_id,
+                blog_id: '<?php echo $shop_id; ?>',
+            },
+            success: function(data) {
+
+                var order_line_items = data;
+
+                // console.log(order_line_items);
+
+                // return;
+
+                // define order line items table body
+                var order_line_items_body = '';
+
+                // loop through order line items
+                order_line_items.forEach(function(order_line_item) {
+
+                    // console.log(order_line_item);
+
+                    // define order line item product id
+                    var order_line_item_product_id = order_line_item.product_id;
+
+                    // define order line item product image
+                    var order_line_item_product_image = order_line_item.product_img;
+
+                    // define order line item product name
+                    var order_line_item_product_name = order_line_item.product_name;
+
+                    // define order line item quantity
+                    var order_line_item_quantity = order_line_item.quantity;
+
+                    // define order line item price
+                    var order_line_item_price = order_line_item.price;
+
+                    // define order line item total
+                    var order_line_item_total = order_line_item.total;
+
+                    // define order line item row
+                    var order_line_item_row = '<tr>' +
+                        '<td class="align-middle">' + order_line_item_product_id + '</td>' +
+                        '<td class="align-middle"><img src="' + order_line_item_product_image + '" alt="' + order_line_item_product_name + '" width="80" height="80"></td>' +
+                        '<td class="align-middle">' + order_line_item_product_name + '</td>' +
+                        '<td class="align-middle">' + order_line_item_quantity + '</td>' +
+                        '<td class="align-middle">' + order_line_item_price + '</td>' +
+                        '<td class="align-middle">' + order_line_item_total + '</td>' +
+                        '</tr>';
+
+                    // append order line item row to order line items body
+                    order_line_items_body += order_line_item_row;
+
+                });
+
+                // append order line items body to order line items table body
+                $('#order_line_items_body').html(order_line_items_body);
+
+            },
+            error: function(error) {
+                console.log(error);
+            }
+        });
+
+        // show modal
+        $('#order_line_items_modal').removeClass('d-none').addClass('d-block');
+
+        // show modal overlay
+        $('#order_line_items_modal_overlay').removeClass('d-none').addClass('d-block');
+
+    }
+
+    // Close modal
+    function closeModal(event) {
+
+        event.preventDefault();
+
+        // hide modal
+        $('#order_line_items_modal').removeClass('d-block').addClass('d-none');
+
+        // hide modal overlay
+        $('#order_line_items_modal_overlay').removeClass('d-block').addClass('d-none');
+
+    }
+
+    // Mark order complete
+    function markComplete(event, order_id) {
+
+        event.preventDefault();
+
+        // change button text
+        $(event.target).text('Marking Complete...');
+
+        // get order line items using standard wordpress ajax
+        $.ajax({
+            url: '<?php echo admin_url('admin-ajax.php'); ?>',
+            type: 'POST',
+            data: {
+                action: 'extech_mark_order_complete',
+                nonce: '<?php echo wp_create_nonce('extech_mark_order_complete'); ?>',
+                order_id: order_id,
+                blog_id: '<?php echo $shop_id; ?>',
+            },
+            success: function(data) {
+               
+                if(data.success){
+                    alert(data.data);
+                }else{
+                    alert(data.data);
+                }
+
+                // reload page
+                location.reload();
+
+            },
+            error: function(error) {
+                console.log(error);
+            }
+        });
+
     }
 </script>
-
-<style>
-
-</style>
 
 <?php get_footer('dashboard');

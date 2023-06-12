@@ -17,6 +17,8 @@
 
 defined( 'ABSPATH' ) || exit;
 
+
+
 if ( $cross_sells ) : ?>
 
 	<div class="cross-sells">

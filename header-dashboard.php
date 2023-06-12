@@ -34,8 +34,11 @@
           </li>
 
           <!-- Orders -->
-          <li class="nav-item">
-            <a class="nav-link" href="<?php echo get_site_url() ?>/dashboard/shop-orders/">Orders</a>
+          <li class="nav-item position-relative">
+            <a class="nav-link orders" href="<?php echo get_site_url() ?>/dashboard/shop-orders/">
+              Orders
+            </a>
+            <span id="new_orders" class="badge bg-danger rounded-pill position-absolute" title="you have new orders waiting to be processed">1</span>
           </li>
 
           <!-- QR code -->
@@ -59,13 +62,13 @@
           </li>
 
           <!-- log out -->
-          <?php if (is_user_logged_in()) : 
-            
+          <?php if (is_user_logged_in()) :
+
             // setup logout nonce, redirect url and logout url
-            $rd_url = get_site_url().'/dashboard/log-in/';
+            $rd_url = get_site_url() . '/dashboard/log-in/';
             $lo_url = wp_logout_url($rd_url);
-            
-            ?>
+
+          ?>
             <li class="nav-item">
               <a class="nav-link" href="<?php echo esc_url($lo_url); ?>">Logout</a>
             </li>

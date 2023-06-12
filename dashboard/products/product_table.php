@@ -3,6 +3,10 @@
 
     <p class="bg-success-subtle fw-semibold text-center p-3 rounded-3 mb-4 shadow-sm">
         All products currently published for your shop are listed below. You can edit a particular product by clicking on the Edit button next to the product in question.
+
+        <!-- add link to shop which is found under child blog path -> shop link -->
+        <a class="text-decoration-none fw-semibold" href="<?php echo get_home_url(); ?>/shop" target="_blank">View your shop.</a>
+
     </p>
 
     <thead class="bg-dark-subtle text-center rounded-1 mb-2">

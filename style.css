@@ -38,8 +38,45 @@ img#logoTop {
 
 h2.woocommerce-loop-product__title {
     text-align: center;
-    line-height: 3;
+    line-height: 1.5;
     font-size: 1.4em;
+    height: 80px;
+    padding-top: 10px;
+}
+
+input#coupon_code {
+    width: 180px;
+}
+
+ul.wc_payment_methods.payment_methods.methods label {
+    font-weight: 700;
+}
+
+.woocommerce a.remove {
+    position: relative;
+    left: 32px;
+    line-height: 0.9;
+    width: 1.1em;
+    height: 1.1em;
+}
+
+div#order_line_items_modal_overlay {
+    width: 100vw;
+    height: 100vh;
+    background: #00000094;
+    left: 0;
+    top: 0;
+}
+
+div#order_line_items_modal {
+    left: 25vw;
+}
+
+span#new_orders {
+    text-align: center;
+    line-height: 0.9;
+    right: -10px;
+    top: -3px;
 }
 
 span.shop-loop-price.d-block {
@@ -124,4 +161,25 @@ div#intro_banner {
 
 div#shop_loop_cont {
     min-height: 100vh;
+}
+
+a.added_to_cart.wc-forward {
+    position: absolute;
+    bottom: -49px;
+    left: 13px;
+    width: 92%;
+    z-index: 100;
+    background: #00800024;
+    text-align: center;
+    padding: 0.4em;
+    border-radius: 0.3em;
+    color: #333;
+    text-decoration: none;
+    text-transform: uppercase;
+    border: 1px solid green;
+    font-weight: 500;
+}
+
+tr.woocommerce-cart-form__cart-item.cart_item img{
+    width: 100px;
 }

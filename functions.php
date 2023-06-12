@@ -31,7 +31,7 @@ add_action('wp_enqueue_scripts', function () {
 });
 
 // Add WooCommerce support
-add_action('after_setup_theme', function(){
+add_action('after_setup_theme', function () {
     add_theme_support('woocommerce');
 });
 
@@ -134,12 +134,11 @@ require_once __DIR__ . '/dashboard/users/ajax_delete_user.php';
 
 remove_action('woocommerce_before_shop_loop_item_title', 'woocommerce_template_loop_product_thumbnail', 10);
 
-add_action('woocommerce_before_shop_loop_item_title', function(){
+add_action('woocommerce_before_shop_loop_item_title', function () {
 
     echo '<div class="product-img-cont">';
     echo woocommerce_template_loop_product_thumbnail();
     echo '</div>';
-
 });
 
 /**
@@ -160,3 +159,107 @@ add_filter('woocommerce_loop_add_to_cart_link', function ($link, $product, $args
     return $link;
 }, 10, 3);
 
+// delete all child blog users when child blog is deleted
+add_action('delete_blog', function ($blog_id, $drop) {
+
+    // get all users on child blog
+    $users = get_users(['blog_id' => $blog_id]);
+
+    // loop through users and delete
+    foreach ($users as $user) {
+        wp_delete_user($user->ID);
+    }
+}, 10, 2);
+
+// disable password changed emails for passwords changed on child blogs
+add_filter('send_password_change_email', function ($send, $user) {
+
+    // get current blog id
+    $current_blog_id = get_current_blog_id();
+
+    // if user is on child blog, disable password changed email
+    if ($current_blog_id !== 1) {
+        return false;
+    }
+
+    return $send;
+}, 10, 2);
+
+// disable admin bar for all users
+add_filter('show_admin_bar', '__return_false');
+
+// remove product page links from cart page
+add_filter('woocommerce_cart_item_permalink', function ($link, $cart_item, $cart_item_key) {
+    return '';
+}, 10, 3);
+
+// remove all checkout fields from checkout form except first name, last name, email address and phone number
+add_filter('woocommerce_checkout_fields', function ($fields) {
+
+    // remove all fields except first name, last name, email address and phone number
+    $fields['billing'] = [
+        'billing_first_name' => $fields['billing']['billing_first_name'],
+        'billing_last_name' => $fields['billing']['billing_last_name'],
+        'billing_email' => $fields['billing']['billing_email'],
+        'billing_phone' => $fields['billing']['billing_phone'],
+    ];
+
+    return $fields;
+}, 10, 1);
+
+// add additional classes to billing form labels and inputs
+add_filter('woocommerce_form_field_args', function ($args, $key, $value) {
+
+    // add additional classes to label
+    $args['label_class'] = ['form-label fw-bold'];
+
+    // add additional classes to input
+    $args['input_class'] = ['form-control'];
+
+    return $args;
+}, 10, 3);
+
+// disable additional information input field on checkout page
+add_filter('woocommerce_enable_order_notes_field', '__return_false');
+
+// hook to woocommerce thank you page to change billing info section title
+add_action('woocommerce_thankyou', function ($order_id) { ?>
+
+    <!-- add script to change billing info section title -->
+    <script>
+        jQuery(function($) {
+            // change billing info section title
+            $('.woocommerce-order ').find('.woocommerce-customer-details > h2').text('Your Billing Information');
+        });
+    </script>
+
+<?php });
+
+// remove product links from order thank you page
+add_filter('woocommerce_order_item_permalink', function ($link, $item, $order) {
+    return '';
+}, 10, 3);
+
+// add additional classes to order thank you page text
+add_filter('woocommerce_thankyou_order_received_text', function ($text) {
+
+    // add additional classes to text
+    $text = '<p class="text-center fw-bold fs-6 mb-5 text-text-black-50 p-2 rounded-2 shadow-sm bg-success-subtle">Thank you, your order has been received. Our staff members are currently picking and packing your items and will bring it to your vehicle soon. Thank you for your support and patience!</p>';
+
+    return $text;
+}, 10, 1);
+
+/**
+ * Get order line items for orders in dashboard
+ */
+include_once EXTECH_PATH . '/dashboard/orders/ajax_fetch_orders.php';
+
+/**
+ * Check for new orders every 30 seconds, append badge to orders menu item if new orders exist and/or update badge order count and play sound
+ */
+include_once EXTECH_PATH . '/dashboard/orders/ajax_check_new_orders.php';
+
+/**
+ * Mark order as complete
+ */
+include_once EXTECH_PATH . '/dashboard/orders/ajax_mark_complete.php';

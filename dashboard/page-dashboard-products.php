@@ -75,17 +75,17 @@ global $post;
         // Get the current active tab ID
         var activeTabId = localStorage.getItem('activeTabID') ? localStorage.getItem('activeTabID') : false;
 
-        // If there's a stored active tab ID, set it as active
+        // log active tab id
+        console.log(activeTabId);
+
+        // If there's a stored active tab ID, trigger click on it's corresponding tab and make sure other tabs and tab panes are hidden
         if (activeTabId) {
-
-            $('.tab-pane').removeClass('show').removeClass('active');
-            $('.nav-link').removeClass('active');
-
-            $(activeTabId).addClass('show').addClass('active')
-            $(activeTabId + '-tab').addClass('active');
-
+            $('#myTab .nav-link').removeClass('active');
+            $('#myTab .nav-link[data-bs-target="' + activeTabId + '"]').addClass('active');
+            $('#productContent .tab-pane').removeClass('show active');
+            $('#productContent .tab-pane' + activeTabId).addClass('show active');
         }
-
+        
         // Store last selected tab
         $('#myTab .nav-link').click(function(event) {
             var active_tab_id = $(this).data('bs-target');
