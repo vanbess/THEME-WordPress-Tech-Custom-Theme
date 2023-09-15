@@ -4,7 +4,10 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title><?php echo get_the_title(); ?></title>
+  <title>
+    <?php echo get_bloginfo('name'); ?> |
+    <?php echo get_bloginfo('description'); ?>
+  </title>
   <?php wp_head(); ?>
 </head>
 
@@ -39,7 +42,7 @@
 
       <!-- brand and home link -->
       <a class="navbar-brand me-5" href="<?php echo get_home_url(); ?>">
-        <img id="logoTop" src="<?php echo EXTECH_URI.'/assets/img/logo-sbs.png'; ?>" alt="Excellerate Technologies">
+        <img id="logoTop" src="<?php echo EXTECH_URI.'/assets/img/logo-sbs.png'; ?>" alt="Excellerate Convenience">
       </a>
 
       <div class="float-end">

@@ -1,8 +1,25 @@
+<?php
+
+// if accessed directly, exit
+if (!defined('ABSPATH')) {
+    exit;
+}
+
+?>
+
+<style>
+    #ordersTab{
+        display: none;
+    }
+</style>
+
 <p class="bg-success-subtle fw-semibold text-center p-3 rounded-3 mb-4 shadow-sm">
     Use the inputs below to edit your product. All fields marked with an asterisk (*) are required.
 </p>
 
 <?php
+
+global $prod_id;
 
 // get prod id
 $prod_id = $_GET['edit_prod'];
@@ -73,7 +90,7 @@ $prod_obj = wc_get_product($prod_id);
             $img_src = wp_get_attachment_image_src($img_id, 'woocommerce-thumbnail');
             ?>
 
-            <img id="edit_prod_img" src="<?php echo $img_src[0]; ?>" alt="<?php echo $prod_obj->get_title; ?>">
+            <img id="edit_prod_img" src="<?php echo $img_src[0]; ?>" alt="<?php echo $prod_obj->get_title(); ?>">
 
         </div>
 
@@ -96,6 +113,13 @@ $prod_obj = wc_get_product($prod_id);
                 $('#remove_img_cont').mouseleave(function() {
                     $('#edit_prod_img').removeClass('opacity-50');
                     $('#remove_img').addClass('d-none');
+                });
+
+                // remove img on click
+                $('#remove_img').click(function(e) {
+                    e.preventDefault();
+                    $('#edit_prod_img').attr('src', '');
+                    $('#remove_img_cont').addClass('d-none');
                 });
             });
         </script>
@@ -122,13 +146,17 @@ $prod_obj = wc_get_product($prod_id);
 add_action('wp_footer', function () {
 
     // retrieve blog_id
-    global $blog_id;
+    global $blog_id, $prod_id;
 
 ?>
 
     <script id="sub_single_prod">
         jQuery(document).ready(function($) {
 
+            // scroll to top on reload
+            $(window).scrollTop(0);
+
+            // product edit form on submit
             $("#form_edit_single_prod").submit(function(e) {
 
                 $('#update_single_product').text('Working...');
@@ -177,6 +205,7 @@ add_action('wp_footer', function () {
                 formData.append("current_blog_id", '<?php echo $blog_id ?>');
                 formData.append("action", 'extech_edit_single_prod');
                 formData.append("_ajax_nonce", '<?php echo EDIT_PROD_NONCE ?>');
+                formData.append("pid", '<?php echo $prod_id; ?>');
 
                 $.ajax({
                     type: 'POST',
@@ -186,8 +215,28 @@ add_action('wp_footer', function () {
                     contentType: false,
                     cache: false,
                     success: function(response) {
-                        alert(response.data.message);
-                        location.reload();
+
+                        // debug
+                        // console.log(response);
+
+                        // response.success === true
+                        if (response.success) {
+
+                            // alert success message
+                            alert(response.data.message);
+
+                            // redirect to products page
+                            window.location.href = '<?php echo get_site_url() . '/dashboard/products'; ?>';
+
+                        } else {
+
+                            // alert error message
+                            alert(response.data.message);
+
+                            // reset submit button text
+                            $('#update_single_product').text('Update Product');
+
+                        }
                     }
                 });
 

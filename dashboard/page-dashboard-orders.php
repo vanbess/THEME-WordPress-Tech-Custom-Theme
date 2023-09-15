@@ -4,6 +4,12 @@
  * Template Name: Dashboard Orders Page
  */
 
+//  if user is not logged in, redirect to login page
+if (!is_user_logged_in()) {
+    wp_redirect(site_url('/dashboard/login'));
+    exit;
+}
+
 get_header('dashboard');
 
 global $post;
@@ -78,7 +84,7 @@ $orders = $wpdb->get_results($query);
 
                     <?php if (empty($orders)) : ?>
                         <tr class="align-bottom">
-                            <td colspan="7" class="bg-warning-subtle fw-semibold">
+                            <td colspan="8" class="bg-warning-subtle fw-semibold">
                                 There are currently no orders to display. Once you start recieving orders, they will display here.
                             </td>
                         </tr>

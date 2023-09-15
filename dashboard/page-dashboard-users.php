@@ -4,6 +4,12 @@
  * Template Name: Dashboard Users Page
  */
 
+//  if user is not logged in, redirect to login page
+if (!is_user_logged_in()) {
+    wp_redirect(site_url('/dashboard/login'));
+    exit;
+}
+
 get_header('dashboard');
 
 global $post;
@@ -52,7 +58,7 @@ $roles = wp_roles()->roles;
                             <td class="align-middle"><?php echo $user->display_name; ?></td>
                             <td class="align-middle"><?php echo $user->user_email; ?></td>
                             <td class="align-middle"><?php echo $roles[$user->roles[0]]['name']; ?></td>
-                            <td class="align-middle"><?php echo $user->display_name === $main_user_first_last ? 'Not allowed <span class="user_info" title="the user which created this account cannot be deleted">?</span>' : '<button class="btn btn-danger del_user" onclick="delUser(event, ' . $user->ID . ', ' . $shop_meta['child_site_id'][0] . ')" title="click to delete this user">Delete</button>'; ?></td>
+                            <td class="align-middle"><?php echo $user->display_name === $main_user_first_last ? 'Not allowed <span class="user_info" title="The user which created this account cannot be deleted">?</span>' : '<button class="btn btn-danger del_user" onclick="delUser(event, ' . $user->ID . ', ' . $shop_meta['child_site_id'][0] . ')" title="click to delete this user">Delete</button>'; ?></td>
                         </tr>
                     <?php endforeach; ?>
 

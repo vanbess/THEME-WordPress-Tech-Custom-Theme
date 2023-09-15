@@ -4,6 +4,12 @@
  * Template Name: Dashboard Products Page
  */
 
+//  if user is not logged in, redirect to login page
+if (!is_user_logged_in()) {
+    wp_redirect(site_url('/dashboard/login'));
+    exit;
+}
+
 get_header('dashboard');
 
 global $post;
@@ -22,9 +28,9 @@ global $post;
                     <li class="nav-item" role="presentation">
                         <button class="nav-link active fw-semibold" id="add-product-tab" data-bs-toggle="tab" data-bs-target="#add-product" type="button" role="tab" aria-controls="add-product" aria-selected="true">Add Product</button>
                     </li>
-                    <li class="nav-item" role="presentation">
+                    <!-- <li class="nav-item" role="presentation">
                         <button class="nav-link fw-semibold" id="import-products-tab" data-bs-toggle="tab" data-bs-target="#import-products" type="button" role="tab" aria-controls="import-products" aria-selected="false">Import Products</button>
-                    </li>
+                    </li> -->
                     <li class="nav-item" role="presentation">
                         <button class="nav-link fw-semibold" id="all-products-tab" data-bs-toggle="tab" data-bs-target="#all-products" type="button" role="tab" aria-controls="all-products" aria-selected="false">All Products</button>
                     </li>

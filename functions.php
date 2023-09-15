@@ -36,7 +36,8 @@ add_action('after_setup_theme', function () {
 });
 
 // fix upload size limit nonsense
-function filter_site_upload_size_limit($size) {
+function filter_site_upload_size_limit($size)
+{
     // Set the upload size limit to 10 MB for users lacking the 'manage_options' capability.
     // 10 MB.
     $size = 1024 * 31000;
@@ -247,7 +248,7 @@ add_filter('woocommerce_thankyou_order_received_text', function ($text) {
     $shop_url = get_permalink(wc_get_page_id('shop'));
 
     // add additional classes to text
-    $text = '<p class="text-center fw-bold fs-6 mb-5 text-black-50 p-2 rounded-2 shadow-sm bg-success-subtle">Thank you, your order has been received. Our staff members are currently picking and packing your items and will bring it to your vehicle soon. Thank you for your support and patience! <a href="'.$shop_url.'">Return to shop</a></p>';
+    $text = '<p class="text-center fw-bold fs-6 mb-5 text-black-50 p-2 rounded-2 shadow-sm bg-success-subtle">Thank you, your order has been received. Our staff members are currently picking and packing your items and will bring it to your vehicle soon. Thank you for your support and patience! <a href="' . $shop_url . '">Return to shop</a></p>';
 
     return $text;
 }, 10, 1);
@@ -266,3 +267,43 @@ include_once EXTECH_PATH . '/dashboard/orders/check_new_order_hook.php';
  * Mark order as complete
  */
 include_once EXTECH_PATH . '/dashboard/orders/ajax_mark_complete.php';
+
+/************************************************
+ * AJAX ACTION to update shop info via dashboard
+ ************************************************/
+add_action('wp_ajax_update_shop_info', 'update_shop_info');
+add_action('wp_ajax_nopriv_update_shop_info', 'update_shop_info');
+
+function update_shop_info()
+{
+
+    // debug
+    // wp_send_json($_POST);
+
+    // get shop id
+    $shop_id = $_POST['shop_id'];
+
+    // PROCESS FORM SUBMISSION
+
+    try {
+
+        // update shop meta
+        update_post_meta($shop_id, 'shop_owner_tel',  sanitize_text_field($_POST['shop_owner_tel']));
+        update_post_meta($shop_id, 'shop_franchise',  sanitize_text_field($_POST['shop_franchise']));
+        update_post_meta($shop_id, 'shop_street_number',  sanitize_text_field($_POST['shop_street_number']));
+        update_post_meta($shop_id, 'shop_suburb',  sanitize_text_field($_POST['shop_suburb']));
+        update_post_meta($shop_id, 'shop_city',  sanitize_text_field($_POST['shop_city']));
+        update_post_meta($shop_id, 'shop_province',  sanitize_text_field($_POST['shop_province']));
+        update_post_meta($shop_id, 'shop_postal',  sanitize_text_field($_POST['shop_postal']));
+
+        // return success message
+        wp_send_json('Shop info updated successfully!');
+
+        // return error message
+    } catch (\Throwable $th) {
+        wp_send_json('An error occurred! Details: ' . $th->getMessage());
+    }
+
+    // end AJAX
+    wp_die();
+}

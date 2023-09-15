@@ -12,6 +12,9 @@ function extech_edit_single_prod() {
 
     check_ajax_referer('edit prod nonce');
 
+    // debug
+    // wp_send_json($_POST);
+
     // grab subbed values and sanitize
     $product_title         = sanitize_text_field($_POST["product_title"]);
     $product_sku           = sanitize_text_field($_POST["product_sku"]);
@@ -22,76 +25,96 @@ function extech_edit_single_prod() {
     $product_status        = sanitize_text_field($_POST["product_status"]);
     $product_stock         = intval($_POST['product_stock']);
 
-    // grab current blog id
+    // get product id
+    $pid = intval($_POST['pid']);
+
+    // wp_send_json($pid);
+
+    // get current blog id
     $blog_id = intval($_POST['current_blog_id']);
+
+    // wp_send_json($blog_id);
 
     // switch to blog
     switch_to_blog($blog_id);
 
-    // insert new product
-    $new_product = array(
-        "post_title"   => $product_title,
-        "post_content" => $product_description,
-        "post_status"  => $product_status,
-        "post_type"    => "product"
-    );
+    // debug: check if we can retrieve product object successfully
+    // $product = get_post($pid);
+    // wp_send_json($product);
 
-    $product_id = wp_insert_post($new_product);
+    // update product meta
+    update_post_meta($pid, '_sku', $product_sku);
+    update_post_meta($pid, '_regular_price', $product_regular_price);
+    update_post_meta($pid, '_sale_price', $product_sale_price);
+    update_post_meta($pid, '_stock', $product_stock);
+    
+    // update product post title
+    wp_update_post([
+        'ID' => $pid,
+        'post_title' => $product_title
+    ]);
 
-    // if product inserted, update associated meta
-    if ($product_id) :
+    // update product post content
+    wp_update_post([
+        'ID' => $pid,
+        'post_content' => $product_description
+    ]);
 
-        update_post_meta($product_id, "_sku", $product_sku);
-        update_post_meta($product_id, "_regular_price", $product_regular_price);
-        update_post_meta($product_id, "_manage_stock", 'yes');
-        update_post_meta($product_id, "_stock_status", "instock");
-        update_post_meta($product_id, "_stock", $product_stock);
+    // update post status
+    wp_update_post([
+        'ID' => $pid,
+        'post_status' => $product_status
+    ]);
 
-        // set sale price if applicable
-        if ($product_sale_price) :
-            update_post_meta($product_id, "_sale_price", $product_sale_price);
+    // if product image exists, insert and attach
+    if ($product_image["size"] > 0) :
+
+        // upload image
+        $upload_dir = wp_upload_dir();
+        $image_data = file_get_contents($product_image["tmp_name"]);
+        $filename   = $product_image["name"];
+
+        // check if directory exists
+        if (wp_mkdir_p($upload_dir["path"])) :
+            $file = $upload_dir["path"] . "/" . $filename;
+        else :
+            $file = $upload_dir["basedir"] . "/" . $filename;
         endif;
 
-        // if product image exists, insert and attach
-        if ($product_image["size"] > 0) :
+        // write image data to file
+        file_put_contents($file, $image_data);
 
-            $upload_dir = wp_upload_dir();
-            $image_data = file_get_contents($product_image["tmp_name"]);
-            $filename   = $product_image["name"];
+        // create attachment
+        $wp_filetype = wp_check_filetype($filename, null);
 
-            if (wp_mkdir_p($upload_dir["path"])) :
-                $file = $upload_dir["path"] . "/" . $filename;
-            else :
-                $file = $upload_dir["basedir"] . "/" . $filename;
-            endif;
+        // set up attachment data
+        $attachment = array(
+            "post_mime_type" => $wp_filetype["type"],
+            "post_title"     => sanitize_file_name($filename),
+            "post_content"   => "",
+            "post_status"    => "inherit"
+        );
 
-            file_put_contents($file, $image_data);
+        // insert attachment
+        $attach_id = wp_insert_attachment($attachment, $file, $pid);
 
-            $wp_filetype = wp_check_filetype($filename, null);
+        // generate attachment data
+        require_once(ABSPATH . "wp-admin/includes/image.php");
 
-            $attachment = array(
-                "post_mime_type" => $wp_filetype["type"],
-                "post_title"     => sanitize_file_name($filename),
-                "post_content"   => "",
-                "post_status"    => "inherit"
-            );
+        $attach_data = wp_generate_attachment_metadata($attach_id, $file);
 
-            $attach_id = wp_insert_attachment($attachment, $file, $product_id);
+        // update attachment data
+        wp_update_attachment_metadata($attach_id, $attach_data);
 
-            require_once(ABSPATH . "wp-admin/includes/image.php");
+        // set product thumbnail
+        set_post_thumbnail($pid, $attach_id);
 
-            $attach_data = wp_generate_attachment_metadata($attach_id, $file);
-
-            wp_update_attachment_metadata($attach_id, $attach_data);
-            set_post_thumbnail($product_id, $attach_id);
-
-        endif;
-
-        wp_send_json_success(array("message" => "Product updated successfully."));
-    else :
-        wp_send_json_error(array("message" => "There was an error updating the product. The page will now reload so that you can try editing it again."));
     endif;
 
+    // send success response
+    wp_send_json_success(['message' => 'Product updated successfully.']);
+
+    // restore current blog
     restore_current_blog();
 
     wp_die();

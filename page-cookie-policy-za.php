@@ -182,7 +182,7 @@ global $post;
             </p>
 
             <p>
-                Excellerate Technologies<br>
+                Excellerate Convenience<br>
                 Address TBC<br>
                 South Africa<br>
                 Website: https://www.excelleratetech.com<br>

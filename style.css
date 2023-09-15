@@ -92,6 +92,7 @@ img#logoTop {
     border-radius: 5px;
 }
 
+
 h2.woocommerce-loop-product__title {
     text-align: center;
     line-height: 1.5;
@@ -188,7 +189,8 @@ div#landing p {
     font-size: 1.3em;
 }
 
-.h1, h1 {
+.h1,
+h1 {
     font-size: 3.5rem;
 }
 
@@ -200,7 +202,8 @@ div#intro_banner_text>h1 {
     line-height: 1.5em;
 }
 
-#intro_banner_register_btn, #hiw_register_btn {
+#intro_banner_register_btn,
+#hiw_register_btn {
     font-size: 1.7rem;
     font-weight: 500;
 }
@@ -213,6 +216,7 @@ div#intro_banner_text>h1 {
 
 div#intro_banner {
     min-height: 600px;
+    border-bottom: 5px solid #212529;
 }
 
 div#shop_loop_cont {
@@ -236,6 +240,219 @@ a.added_to_cart.wc-forward {
     font-weight: 500;
 }
 
-tr.woocommerce-cart-form__cart-item.cart_item img{
+tr.woocommerce-cart-form__cart-item.cart_item img {
     width: 100px;
 }
+
+div#what_we_do p {
+    font-size: 2rem;
+}
+
+.coupon {
+    display: none;
+}
+
+h1.woocommerce-cart-title.page-title.mb-5.pb-5.border-bottom.border-2 {
+    font-size: 40px;
+}
+
+.product-img-cont img {
+    width: 100%;
+    height: auto;
+}
+
+/* ************** */
+/* RESPONSIVENESS */
+/* ************** */
+
+/* 1440 */
+@media screen and (max-width: 1440px) {
+    h1.text-light.text-opacity-75 {
+        font-size: 2.5em !important;
+    }
+}
+
+/* 1366 */
+@media screen and (max-width: 1366px) {}
+
+/* 1280 */
+@media screen and (max-width: 1280px) {
+    h1.text-light.text-opacity-75 {
+        font-size: 2.2em !important;
+    }
+}
+
+/* 1024 */
+@media screen and (max-width: 1024px) {
+    h1.text-light.text-opacity-75 {
+        font-size: 1.8em !important;
+    }
+
+    div#what_we_do p {
+        font-size: 1.5rem;
+    }
+
+    #hiw_register_btn {
+        font-size: 1.5rem;
+        font-weight: 500;
+    }
+
+    .h1,
+    h1 {
+        font-size: 2.5rem;
+    }
+
+    .h3,
+    h3 {
+        font-size: calc(1.1rem + .6vw);
+    }
+
+    table#table-sales,
+    div#sales-overview,
+    .row.orders,
+    .row.qr-code.mb-5.pb-5,
+    form#acc-update-shop,
+    form#acc-update-shop input,
+    .row.users,
+    div#new-user-form-cont,
+    div#new-user-form-cont input, .row.products, .row.products input, tbody#prod_list_body a {
+        font-size: 14px;
+    }
+
+}
+
+/* 991 */
+@media screen and (max-width: 991px) {
+
+    .navbar-toggler {
+        background-color: #275ea0;
+    }
+
+    div#what_we_do {
+        padding-bottom: 0 !important;
+        margin-bottom: 0 !important;
+    }
+
+    a#hiw_register_btn {
+        width: 100% !important;
+    }
+
+}
+
+/* 800 */
+@media screen and (max-width: 800px) {}
+
+/* 768 */
+@media screen and (max-width: 768px) {
+    .actions {
+        display: none !important;
+    }
+}
+
+/* 767 */
+@media screen and (max-width: 767px) {
+
+    .product-img-cont img {
+        width: 100%;
+        height: auto;
+    }
+    
+    h2.woocommerce-loop-product__title {
+        font-size: 2em;
+        height: 60px;
+    }
+    
+    span.shop-loop-price.d-block {
+        font-size: 2em;
+        padding-bottom: 1em;
+    }
+    
+    a.btn.btn-primary.w-100.fw-semibold.fs-6.text-uppercase.shadow-sm.button.product_type_simple.add_to_cart_button.ajax_add_to_cart {
+        font-size: 1.6em !important;
+    }
+    
+    .row.products > div {
+        padding-bottom: 4em;
+        padding-left: 0;
+        padding-right: 0;
+        left: 12px;
+    }
+
+    a.added_to_cart.wc-forward {
+        position: absolute;
+        bottom: 260px;
+    }
+}
+
+/* 575 */
+@media screen and (max-width: 575px) {
+
+    .woocommerce a.remove{
+        left: 0;
+    }
+
+    .col-8 {
+        flex: 0 0 100%;
+        max-width: 100%;
+        margin-left: 0;
+    }
+
+    .col-6 {
+        flex: 0 0 100%;
+        max-width: 100%;
+        width: 100%;
+        margin-left: 0;
+    }
+
+    .col-4 {
+        flex: 0 0 100%;
+        max-width: 100%;
+        margin-left: 0;
+    }
+
+    .col {
+        flex: 0 0 100%;
+        max-width: 100%;
+        margin-left: 0;
+    }
+
+    div#hiw_register_cont a {
+        width: 100% !important;
+    }
+
+    .h3,
+    h3 {
+        font-size: calc(1.7rem + .6vw);
+    }
+
+    #how_it_works>div>div>div {
+        margin-bottom: 3em;
+    }
+
+    #how_it_works>div>div>div:last-child {
+        margin-bottom: initial;
+    }
+
+    div#intro_banner_text {
+        margin-bottom: 3em;
+        text-align: center;
+        font-size: 0.8rem;
+    }
+
+    div#contact-bar-top>.row>.col {
+        max-width: 50%;
+        flex: 0 0 50%;
+    }
+}
+
+/* 540 */
+@media screen and (max-width: 540px) {}
+
+/* 425 */
+@media screen and (max-width: 425px) {}
+
+/* 375 */
+@media screen and (max-width: 375px) {}
+
+/* 320 */
+@media screen and (max-width: 320px) {}

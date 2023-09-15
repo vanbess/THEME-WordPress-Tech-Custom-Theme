@@ -16,17 +16,17 @@ $p_id = $post->ID;
 <div class="container-fluid">
 
     <!-- intro background -->
-    <div id="intro_banner" class="row p-5 mb-5 align-items-center shadow-lg" style="background-image: url(<?php echo get_field('intro_banner'); ?>);">
+    <div id="intro_banner" class="row p-5 mb-5 align-items-center shadow-lg" style="background-image: url(<?php echo get_field('intro_banner'); ?>); background-size: cover; background-position-y: center;">
 
         <!-- intro text -->
-        <div id="intro_banner_text" class="col-8 bg-black bg-opacity-75 p-5">
-            <h1 class="text-light text-opacity-75" style="font-size: 3rem;">
+        <div id="intro_banner_text" class="col-8 col-sm-12 col-xs-12 bg-black p-5" style="opacity: 0.85;">
+            <h1 class="text-light text-opacity-75 text-sm-center" style="font-size: 3rem;">
                 <?php echo get_field('intro_banner_text', $p_id); ?>
             </h1>
         </div>
 
         <!-- intro cta -->
-        <div id="intro_banner_cta" class="col-4 text-center">
+        <div id="intro_banner_cta" class="col-4 col-sm-12 col-xs-12 text-center">
             <a href="<?php echo home_url('register'); ?>" id="intro_banner_register_btn" type="button" class="btn btn-lg btn-warning text-uppercase text-center shadow-lg" title="Register your shop today">
                 <?php echo get_field('intro_banner_button_text', $p_id); ?>
             </a>
@@ -86,21 +86,21 @@ $p_id = $post->ID;
     </div>
 
     <!-- about -->
-    <div id="about_us" class="row pt-5 pb-5 mt-5 mb-5">
+    <!-- <div id="about_us" class="row pt-5 pb-5 mt-5 mb-5">
         <div class="col">
             <h1 class="text-center pb-5">About Us</h1>
 
             <p class="text-center pb-5"><?php echo get_field('about_us_text', $p_id); ?></p>
         </div>
-    </div>
+    </div> -->
 
     <!-- contact -->
     <div id="contact" class="row pt-5 pb-5 mt-5 mb-5">
 
         <!-- contact form -->
-        <div id="landing-contact-form-cont" class="col-6 offset-3 mb-5">
+        <div id="landing-contact-form-cont" class="col-xl-6 offset-xl-3 col-lg-12 mb-5">
 
-            <h1 class="text-center pb-5">Questions? Contact Us</h1>
+            <h1 class="text-center pb-5">Interested? Contact Us!</h1>
 
             <p class="text-center pb-5"><?php echo get_field('contact_us_text', $p_id); ?></p>
 
@@ -137,7 +137,7 @@ $p_id = $post->ID;
                     $toEmail = 'info@excelleratetech.com';
                     $respondTo = sanitize_email($_POST['email']);
                     $msg = '<h3>Good day</h3>';
-                    $msg .= '<p>A new contact form submission was received on the Excellerate Technologies website.</p>';
+                    $msg .= '<p>A new contact form submission was received on the Excellerate Convenience website.</p>';
                     $msg .= '<p><b><u>SUBMISSION DETAILS:</u></b></p>';
                     $msg .= '<p><b>First name: </b>' . sanitize_text_field($_POST['first_name']) . '</p>';
                     $msg .= '<p><b>Last name: </b>' . sanitize_text_field($_POST['last_name']) . '</p>';
@@ -150,7 +150,7 @@ $p_id = $post->ID;
 
                     $headers = [
                         'Content-Type: text/html; charset=UTF-8',
-                        'From: Excellerate Technologies Website <website@excelleratetech.com>',
+                        'From: Excellerate Convenience Website <website@excelleratetech.com>',
                         'Reply-To: Reply Address <' . sanitize_email($_POST['email']) . '>',
                     ];
 

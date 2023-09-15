@@ -27,12 +27,6 @@ get_header( 'shop' );
  * @hooked WC_Structured_Data::generate_website_data() - 30
  */
 do_action( 'woocommerce_before_main_content' );
-
-// $shop_id = fetch_shop_id();
-
-// echo $shop_id;
-
-
 ?>
 <header class="woocommerce-products-header">
 

@@ -17,9 +17,10 @@
 
 defined( 'ABSPATH' ) || exit;
 
-
-
 do_action( 'woocommerce_before_cart' ); ?>
+
+<!-- page title -->
+<h1 class="woocommerce-cart-title page-title mb-5 pb-5 border-bottom border-2"><?php esc_html_e( 'Your Cart', 'woocommerce' ); ?></h1>
 
 <form class="woocommerce-cart-form" action="<?php echo esc_url( wc_get_cart_url() ); ?>" method="post">
 	<?php do_action( 'woocommerce_before_cart_table' ); ?>

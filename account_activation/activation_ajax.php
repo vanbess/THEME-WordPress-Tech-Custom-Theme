@@ -79,7 +79,7 @@ function extech_acc_activation() {
             // Send an email to the user with their new password
             $user    = get_user_by('ID', $owner_id);
             $to      = $user->user_email;
-            $subject = 'Your password for Excellerate Technologies';
+            $subject = 'Your password for Excellerate Convenience';
             $message = '<h2>Good day ' . $user->first_name . ' ' . $user->last_name . '</h2>';
             $message .= '<p>You recently activated your account and set up your password.</p>';
             $message .= '<p>Your password is: <b>' . $pass . '</b></p>';
@@ -87,7 +87,7 @@ function extech_acc_activation() {
             $message .= "<p>You may now log in at <a href='$login_url'><b>this link.</b></a></p>";
             $message .= '<p></p>';
             $message .= '<p><b>Best wishes,</b></p>';
-            $message .= '<p><b>The Excellerate Technologies Team</b></p>';
+            $message .= '<p><b>The Excellerate Convenience Team</b></p>';
             $headers = array('Content-Type: text/html; charset=UTF-8');
 
             wp_mail($to, $subject, $message, $headers);

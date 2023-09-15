@@ -89,30 +89,37 @@ add_action('wp_footer', function () {
                 // Check if required fields are filled in
                 if ($("#product_title").val() === '') {
                     alert("Please enter a product title.");
+                    $('#add_single_product').text('Add Product');
                     return;
                 }
                 if ($("#product_sku").val() === '') {
                     alert("Please enter a product SKU.");
+                    $('#add_single_product').text('Add Product');
                     return;
                 }
                 if ($("#product_regular_price").val() === '') {
                     alert("Please enter a product regular price.");
+                    $('#add_single_product').text('Add Product');
                     return;
                 }
                 if ($("#product_description").val() === '') {
                     alert("Please enter a product description.");
+                    $('#add_single_product').text('Add Product');
                     return;
                 }
                 if ($("#product_status").val() === '') {
                     alert("Please select a product status.");
+                    $('#add_single_product').text('Add Product');
                     return;
                 }
                 if ($("#product_status").val() === '') {
                     alert("Please select a product status.");
+                    $('#add_single_product').text('Add Product');
                     return;
                 }
                 if ($("#product_stock").val() === '') {
                     alert("Please provide stock on hand for this product.");
+                    $('#add_single_product').text('Add Product');
                     return;
                 }
 

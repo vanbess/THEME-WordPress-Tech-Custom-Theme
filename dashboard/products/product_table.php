@@ -1,3 +1,14 @@
+<?php
+// if accessed directly, exit
+if (!defined('ABSPATH')) {
+    exit;
+}
+
+// get current product count and only display load more button if count > 50
+$prod_count = wp_count_posts('product');
+$total      = $prod_count->publish + $prod_count->draft;
+?>
+
 <!-- product table -->
 <table id="product_table" class="table mb-5 table-striped">
 
@@ -22,19 +33,22 @@
     </thead>
     <tbody id="prod_list_body" class="text-center">
         <!-- if no products -->
-        <tr id="prod_list_no_prods" class="align-middle d-none">
-            <td colspan="7">
-                <p id="prod_list_no_prods_text" class="bg-warning-subtle p-3 rounded-3 fw-semibold shadow-sm mt-3"></p>
-            </td>
-        </tr>
+        <?php if ($total == 0) : ?>
+            <tr id="prod_list_no_prods" class="align-middle">
+                <td colspan="7">
+                    <p id="prod_list_no_prods_text" class="bg-warning-subtle p-3 rounded-3 fw-semibold shadow-sm mt-3">
+                        You have no products yet. Please add a product to get started.
+                    </p>
+                </td>
+            </tr>
+        <?php endif; ?>
     </tbody>
 
 </table>
 
 <?php
-// get current product count and only display load more button if count > 50
-$prod_count = wp_count_posts('product');
-$total      = $prod_count->publish + $prod_count->draft;
+
+
 
 if ($total > 50) : ?>
     <!-- load more products -->

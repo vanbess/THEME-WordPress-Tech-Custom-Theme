@@ -4,6 +4,12 @@
  * Template Name: Dashboard Account Page
  */
 
+//  redirect to login page if user is not logged in
+if (!is_user_logged_in()) {
+    wp_redirect(site_url('/dashboard/login'));
+    exit;
+}
+
 get_header('dashboard');
 
 global $post;
@@ -38,41 +44,7 @@ else :
     // get shop meta
     $shop_meta = get_post_meta($shop_id);
 
-endif;
-
-// PROCESS FORM SUBMISSION
-if (isset($_POST['update-shop-info']) && !$err_msg) :
-
-    // echo '<pre>';
-    // print_r($_POST);
-    // echo '</pre>';
-
-    try {
-        //code...
-        update_post_meta($shop_id, 'shop_owner_tel',  sanitize_text_field($_POST['shop_owner_tel']));
-        update_post_meta($shop_id, 'shop_franchise',  sanitize_text_field($_POST['shop_franchise']));
-        update_post_meta($shop_id, 'shop_street_number',  sanitize_text_field($_POST['shop_street_number']));
-        update_post_meta($shop_id, 'shop_suburb',  sanitize_text_field($_POST['shop_suburb']));
-        update_post_meta($shop_id, 'shop_city',  sanitize_text_field($_POST['shop_city']));
-        update_post_meta($shop_id, 'shop_province',  sanitize_text_field($_POST['shop_province']));
-        update_post_meta($shop_id, 'shop_postal',  sanitize_text_field($_POST['shop_postal']));
-    } catch (\Throwable $th) {
-        echo $th->getMessage();
-    }
-
-    // unset $_POST object
-    unset($_POST);
-
-endif;
-
-// restore current blog
-restore_current_blog();
-
-// echo '<pre>';
-// print_r($shop_meta);
-// echo '</pre>';
-
-?>
+endif; ?>
 
 <!-- Main content -->
 <div id="dashboard-cont" class="container py-5 mb-5" style="min-height: 90vh;">
@@ -145,10 +117,9 @@ restore_current_blog();
                     ]
                     ?>
 
+                    <option value="">select province</option>
+
                     <?php foreach ($opts as $opt) : ?>
-
-                        <option value="">select province</option>
-
                         <?php if (isset($shop_meta['shop_province'][0]) && $opt === $shop_meta['shop_province'][0]) : ?>
                             <option value="<?php echo $opt; ?>" selected><?php echo $opt; ?></option>
                         <?php else : ?>
@@ -163,13 +134,8 @@ restore_current_blog();
                 <label for="shop_postal" class="mb-1 ps-2 fw-semibold"><em>Postal code*</em></label>
                 <input type="text" name="shop_postal" id="shop_postal" class="form-control mb-4 shadow-sm" placeholder="postal code*" required value="<?php echo isset($shop_meta['shop_postal'][0]) ? $shop_meta['shop_postal'][0] : ''; ?>">
 
-                <?php if ($err_msg) : ?>
-                    <!-- submit -->
-                    <button type="submit" class="btn btn-primary btn-md w-100 shadow-sm" data-bs-toggle="tooltip" data-bs-placement="top" title="You're not allowed to perform this action until the error mentioned above has been resolved" name="update-shop-info" id="update-shop-info" value="Update shop info">some text here</button>
-                <?php else : ?>
-                    <!-- submit -->
-                    <input type="submit" class="btn btn-primary btn-md w-100 shadow-sm" name="update-shop-info" id="update-shop-info" value="Update shop info">
-                <?php endif; ?>
+                <!-- submit -->
+                <input type="submit" class="btn btn-primary btn-md w-100 shadow-sm" name="update-shop-info" id="update-shop-info" value="Update shop info">
 
             </form>
 
@@ -177,4 +143,51 @@ restore_current_blog();
     </div>
 </div>
 
-<?php get_footer('dashboard'); ?>
+<!-- submit form via WP AJAX -->
+<script>
+    jQuery(document).ready(function($) {
+
+        // submit form via ajax (keep it simple please and use alerts for now)
+        $('#acc-update-shop').submit(function(e) {
+
+            // prevent default form submission
+            e.preventDefault();
+
+            // if any fields are empty, alert user and stop
+            if ($('#shop_owner_tel').val() === '' || $('#shop_franchise').val() === '' || $('#shop_street_number').val() === '' || $('#shop_suburb').val() === '' || $('#shop_city').val() === '' || $('#shop_province').val() === '' || $('#shop_postal').val() === '') {
+
+                // show error message
+                alert('Please fill in all required fields.');
+
+                // stop
+                return false;
+
+            }
+
+            // setup data object
+            var data = {
+                'action': 'update_shop_info',
+                'shop_owner_tel': $('#shop_owner_tel').val(),
+                'shop_franchise': $('#shop_franchise').val(),
+                'shop_street_number': $('#shop_street_number').val(),
+                'shop_suburb': $('#shop_suburb').val(),
+                'shop_city': $('#shop_city').val(),
+                'shop_province': $('#shop_province').val(),
+                'shop_postal': $('#shop_postal').val(),
+                'shop_id': '<?php echo $shop_id; ?>'
+            };
+
+            // init ajax post request
+            $.post('<?php echo admin_url('admin-ajax.php'); ?>', data, function(response) {
+
+                // alert response and reload page
+                alert(response);
+                location.reload();
+            });
+
+        });
+
+    });
+</script>
+
+<?php get_footer('dashboard');

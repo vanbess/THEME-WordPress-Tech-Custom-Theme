@@ -4,6 +4,12 @@
  * Template Name: Dashboard
  */
 
+//  if user is not logged in, redirect to login page
+if (!is_user_logged_in()) {
+    wp_redirect(site_url('/dashboard/login'));
+    exit;
+}
+
 get_header('dashboard');
 
 global $post, $wpdb;
@@ -11,32 +17,36 @@ global $post, $wpdb;
 // retrieve shop id
 $shop_id = fetch_shop_id();
 
-// switch blog
-switch_to_blog($shop_id);
+// echo $shop_id;
 
-// setup query to retrieve order data
+// switch blog
+// switch_to_blog($shop_id);
+
 $query = "
-    SELECT 
-        DATE(post_date) AS Date,
-        SUM(meta.meta_value) AS QtySold,
-        SUM(meta.meta_value * order_items.meta_value) AS TotalRevenue,
-        AVG(order_items.meta_value) AS AvgSaleValue,
-        MIN(order_items.meta_value) AS LowestSaleValue,
-        MAX(order_items.meta_value) AS HighestSaleValue
-    FROM {$wpdb->posts} AS posts
-    INNER JOIN {$wpdb->postmeta} AS meta ON posts.ID = meta.post_id
-    INNER JOIN {$wpdb->prefix}woocommerce_order_items AS order_items ON posts.ID = order_items.order_id
-    INNER JOIN {$wpdb->prefix}woocommerce_order_itemmeta AS item_meta ON order_items.order_item_id = item_meta.order_item_id
-    WHERE posts.post_type = 'shop_order'
-        AND posts.post_status IN ('wc-completed', 'wc-processing')
-        AND meta.meta_key = '_qty'
-        AND item_meta.meta_key = '_line_total'
-        AND posts.post_date >= DATE_SUB(NOW(), INTERVAL 30 DAY)
-    GROUP BY Date
-    ORDER BY Date ASC
+SELECT 
+DATE(posts.post_date) AS summary_date,
+SUM(order_itemmeta_qty.meta_value) AS total_qty,
+SUM(postmeta_total.meta_value) AS gross_revenue,
+AVG(postmeta_total.meta_value) AS average_sale_value,
+MIN(postmeta_total.meta_value) AS lowest_sale,
+MAX(postmeta_total.meta_value) AS highest_sale
+FROM {$wpdb->prefix}posts AS posts
+INNER JOIN {$wpdb->prefix}woocommerce_order_items AS order_items ON order_items.order_id = posts.ID
+INNER JOIN {$wpdb->prefix}woocommerce_order_itemmeta AS order_itemmeta_qty ON order_itemmeta_qty.order_item_id = order_items.order_item_id AND order_itemmeta_qty.meta_key = '_qty'
+INNER JOIN {$wpdb->prefix}postmeta AS postmeta_total ON postmeta_total.post_id = posts.ID AND postmeta_total.meta_key = '_order_total'
+WHERE 
+posts.post_type = 'shop_order'
+GROUP BY 
+DATE(posts.post_date)
+ORDER BY 
+DATE(posts.post_date) ASC
 ";
 
-$results = $wpdb->get_results($query);
+
+// retrieve orders
+$orders = $wpdb->get_results($query);
+
+// var_dump($orders);
 
 ?>
 
@@ -64,18 +74,18 @@ $results = $wpdb->get_results($query);
                 <tbody id="table-sales-body" class="text-center">
 
                     <?php
-                    if (is_array($results) && !empty($results)) :
+                    if (is_array($orders) && !empty($orders)) :
 
-                        // Process the results as needed
-                        foreach ($results as $result) :
+                        // Process the orderss as needed
+                        foreach ($orderss as $orders) :
 
                             // setup data
-                            $date             = $result->Date;
-                            $qtySold          = $result->QtySold;
-                            $totalRevenue     = $result->TotalRevenue;
-                            $avgSaleValue     = $result->AvgSaleValue;
-                            $lowestSaleValue  = $result->LowestSaleValue;
-                            $highestSaleValue = $result->HighestSaleValue; ?>
+                            $date             = $orders->Date;
+                            $qtySold          = $orders->QtySold;
+                            $totalRevenue     = $orders->TotalRevenue;
+                            $avgSaleValue     = $orders->AvgSaleValue;
+                            $lowestSaleValue  = $orders->LowestSaleValue;
+                            $highestSaleValue = $orders->HighestSaleValue; ?>
 
                             <tr>
                                 <td class="align-middle"><?php echo $date; ?></td>

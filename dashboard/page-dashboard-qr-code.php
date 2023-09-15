@@ -4,6 +4,12 @@
  * Template Name: Dashboard QR Code Page
  */
 
+//  if user is not logged in, redirect to login page
+if (!is_user_logged_in()) {
+    wp_redirect(site_url('/dashboard/login'));
+    exit;
+}
+
 get_header('dashboard');
 
 global $post;
